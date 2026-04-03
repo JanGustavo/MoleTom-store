@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MoleTom | Crie seu moletom</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+  </head>
+  <body>
+    <main class="page-shell hero-shell">
+      <section class="hero-card">
+        <p class="eyebrow">Moletom personalizado com IA</p>
+        <h1>Crie estampas únicas para o seu moletom.</h1>
+        <p class="hero-copy">
+          Escreva o prompt, escolha a cor e gere a arte do peito em poucos
+          segundos.
+        </p>
+        <div class="button-row">
+          <a class="btn btn-primary" href="{{ url_for('generator') }}"
+            >Gerar meu moletom</a
+          >
+          <a class="btn btn-secondary" href="{{ url_for('generator') }}#cores"
+            >Ver cores</a
+          >
+        </div>
+        <div class="quick-actions">
+          <a class="chip" href="{{ url_for('generator') }}?color=preto"
+            >Preto</a
+          >
+          <a class="chip" href="{{ url_for('generator') }}?color=branco"
+            >Branco</a
+          >
+          <a class="chip" href="{{ url_for('generator') }}?color=vinho"
+            >Vinho</a
+          >
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Gerador | MoleTom</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+  </head>
+  <body>
+    <main class="page-shell">
+      <section class="panel">
+        <p class="eyebrow">Passo 1</p>
+        <h1>Gere a imagem do moletom</h1>
+
+        <form method="POST" class="generator-form">
+          <label>
+            Prompt
+            <input name="prompt" placeholder="Ex: dragão cyberpunk" required />
+          </label>
+
+          <div class="color-group" id="cores">
+            <span>Cor do moletom</span>
+            <label
+              ><input
+                type="radio"
+                name="color"
+                value="preto"
+                {%
+                if
+                selected_color=""
+                ="preto"
+                %}checked{%
+                endif
+                %}
+              />
+              Preto</label
+            >
+            <label
+              ><input
+                type="radio"
+                name="color"
+                value="branco"
+                {%
+                if
+                selected_color=""
+                ="branco"
+                %}checked{%
+                endif
+                %}
+              />
+              Branco</label
+            >
+            <label
+              ><input
+                type="radio"
+                name="color"
+                value="vinho"
+                {%
+                if
+                selected_color=""
+                ="vinho"
+                %}checked{%
+                endif
+                %}
+              />
+              Vinho</label
+            >
+          </div>
+
+          <button class="btn btn-primary" type="submit">Gerar imagem</button>
+        </form>
+
+        <div class="quick-actions">
+          <button
+            class="chip"
+            type="button"
+            onclick="
+              document.querySelector(
+                'input[name=\'color\'][value=\'preto\']',
+              ).checked = true
+            "
+          >
+            Selecionar preto
+          </button>
+          <button
+            class="chip"
+            type="button"
+            onclick="
+              document.querySelector(
+                'input[name=\'color\'][value=\'branco\']',
+              ).checked = true
+            "
+          >
+            Selecionar branco
+          </button>
+          <button
+            class="chip"
+            type="button"
+            onclick="
+              document.querySelector(
+                'input[name=\'color\'][value=\'vinho\']',
+              ).checked = true
+            "
+          >
+            Selecionar vinho
+          </button>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

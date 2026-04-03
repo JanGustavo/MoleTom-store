@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Preview | MoleTom</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+  </head>
+  <body>
+    <main class="page-shell">
+      <section class="panel preview-grid">
+        <div>
+          <p class="eyebrow">Passo 2</p>
+          <h1>Pré-visualização do moletom</h1>
+          <p class="hero-copy">
+            Modelo: {{ design.color|capitalize }}. Estampa gerada a partir do
+            prompt: {{ design.prompt }}.
+          </p>
+          <div class="button-row">
+            <a
+              class="btn btn-primary"
+              href="{{ url_for('checkout', design_id=design.id) }}"
+              >Comprar</a
+            >
+            <a class="btn btn-secondary" href="{{ url_for('generator') }}"
+              >Gerar outro</a
+            >
+          </div>
+        </div>
+
+        <div class="hoodie-preview">
+          <img
+            src="{{ url_for('static', filename='img/moletom_' ~ design.color ~ '.webp') }}"
+            alt="Moletom {{ design.color }}"
+          />
+          <img
+            src="{{ design.image_url }}"
+            class="print"
+            alt="Estampa gerada"
+          />
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
