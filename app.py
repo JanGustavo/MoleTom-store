@@ -51,3 +51,7 @@ def preview(design_id):
 def checkout(design_id):
     design = Design.query.get_or_404(design_id)
     return render_template("checkout.html", design=design)
+
+
+if __name__ == "__main__":
+    app.run(debug=True)

@@ -4,7 +4,6 @@ import base64
 from pathlib import Path
 from uuid import uuid4
 
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 STATIC_DIR = Path(__file__).resolve().parent / "static"
 GENERATED_DIR = STATIC_DIR / "generated"
 
@@ -18,6 +17,12 @@ def _save_generated_image(image_b64):
     return f"/static/generated/{filename}"
 
 def generate_design(prompt):
+    api_key = os.getenv("OPENAI_API_KEY")
+
+    if not api_key:
+        raise RuntimeError("Defina a variável OPENAI_API_KEY para gerar imagens.")
+
+    client = OpenAI(api_key=api_key)
 
     full_prompt = f"""
     minimalist streetwear hoodie print,
