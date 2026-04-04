@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MOLE TOM | Design da Comunidade</title>
+    <link rel="icon" href="{{ url_for('static', filename='img/logo2.png') }}" />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/community.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body class="page-shell community-shell">
+    <main class="container community-detail">
+      {% set community = entry[0] %} {% set design = entry[1] %} {% set user =
+      entry[2] %}
+      <a href="{{ url_for('comunidade') }}" class="btn-secondary"
+        ><i class="fas fa-arrow-left"></i> Voltar para Galeria</a
+      >
+      <div class="community-detail-grid">
+        <img src="{{ design.image_url }}" alt="{{ community.title }}" />
+        <div>
+          <h1>{{ community.title }}</h1>
+          <p class="community-meta">
+            Criado por @{{ user.username or 'criador' }}
+          </p>
+          {% if community.caption %}
+          <p class="community-caption">{{ community.caption }}</p>
+          {% endif %}
+          <p class="community-meta">
+            <i class="fas fa-fire"></i> {{ community.votes_count }} votos
+          </p>
+          <div class="community-actions">
+            <a class="btn-primary" href="{{ url_for('generator') }}"
+              ><i class="fas fa-wand-magic-sparkles"></i> Criar Minha Versão</a
+            >
+            <a
+              class="btn-secondary"
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://twitter.com/intent/tweet?text={{ ('Design da comunidade MoleTom: ' ~ url_for('comunidade_design', community_design_id=community.id, _external=True)) | urlencode }}"
+              ><i class="fab fa-x-twitter"></i> Compartilhar</a
+            >
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

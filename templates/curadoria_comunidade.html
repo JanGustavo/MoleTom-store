@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MOLE TOM | Curadoria da Comunidade</title>
+    <link rel="icon" href="{{ url_for('static', filename='img/logo2.png') }}" />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/community.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body class="page-shell community-shell">
+    <main class="container">
+      <section class="community-hero">
+        <h1>Curadoria da Comunidade</h1>
+        <p>
+          Aprove, rejeite e destaque os designs que melhor representam o
+          universo MoleTom.
+        </p>
+      </section>
+      {% if feedback %}
+      <p class="moderation-feedback">{{ feedback }}</p>
+      {% endif %}
+      <section class="community-grid">
+        {% if pending_entries %} {% for entry, design, user in pending_entries
+        %}
+        <article class="community-card">
+          <img
+            src="{{ design.image_url }}"
+            alt="{{ entry.title }}"
+            loading="lazy"
+          />
+          <div class="community-content">
+            <h3>{{ entry.title }}</h3>
+            <p class="community-meta">
+              por @{{ user.username or 'criador' }} • {{ design.color|capitalize
+              }}
+            </p>
+            {% if entry.caption %}
+            <p class="community-caption">{{ entry.caption }}</p>
+            {% endif %}
+            <form method="POST" class="moderation-form">
+              <input type="hidden" name="entry_id" value="{{ entry.id }}" />
+              <textarea
+                name="note"
+                maxlength="280"
+                placeholder="Nota da curadoria (opcional)"
+              ></textarea>
+              <div class="community-actions">
+                <button
+                  class="btn-primary"
+                  type="submit"
+                  name="action"
+                  value="approve"
+                >
+                  <i class="fas fa-check"></i> Aprovar
+                </button>
+                <button
+                  class="btn-secondary"
+                  type="submit"
+                  name="action"
+                  value="reject"
+                >
+                  <i class="fas fa-ban"></i> Rejeitar
+                </button>
+              </div>
+            </form>
+          </div>
+        </article>
+        {% endfor %} {% else %}
+        <div class="empty-state">
+          <i class="fas fa-check-circle"></i>
+          <h3>Fila de curadoria vazia</h3>
+          <p>Todos os envios pendentes já foram avaliados.</p>
+        </div>
+        {% endif %}
+      </section>
+    </main>
+  </body>
+</html>

@@ -48,6 +48,25 @@
               <p class="brand-subtitle">Streetwear personalizado sob demanda</p>
             </div>
           </div>
+          <nav class="nav-menu checkout-nav" aria-label="Navegação principal">
+            <ul class="is-layout-flex">
+              <li>
+                <a href="{{ url_for('home') }}" class="nav-link"
+                  ><i class="fas fa-home"></i> Home</a
+                >
+              </li>
+              <li>
+                <a href="{{ url_for('generator') }}" class="nav-link"
+                  ><i class="fas fa-wand-magic-sparkles"></i> Gerar Estampa</a
+                >
+              </li>
+              <li>
+                <a href="{{ url_for('minha_conta') }}" class="nav-link"
+                  ><i class="fas fa-user"></i> Minha Conta</a
+                >
+              </li>
+            </ul>
+          </nav>
           <div class="stepper">
             <span>1. Criação</span>
             <i class="fas fa-chevron-right" style="font-size: 0.7rem"></i>

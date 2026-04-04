@@ -25,6 +25,14 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
+    <script
+      src="{{ url_for('static', filename='js/header_scroll.js') }}"
+      defer
+    ></script>
+    <script
+      src="{{ url_for('static', filename='js/generator_ui.js') }}"
+      defer
+    ></script>
   </head>
   <body>
     <div class="page-shell">
@@ -53,15 +61,24 @@
           </div>
 
           <ul class="is-layout-flex">
-            <li><a href="{{ url_for('home') }}" class="nav-link">Home</a></li>
+            <li>
+              <a href="{{ url_for('home') }}" class="nav-link"
+                ><i class="fas fa-home"></i> Home</a
+              >
+            </li>
             <li>
               <a href="{{ url_for('generator') }}" class="nav-link active"
-                >Gerar Estampa</a
+                ><i class="fas fa-wand-magic-sparkles"></i> Gerar Estampa</a
               >
             </li>
             <li>
               <a href="{{ url_for('minha_conta') }}" class="nav-link"
-                >Minha Conta</a
+                ><i class="fas fa-user"></i> Minha Conta</a
+              >
+            </li>
+            <li>
+              <a href="{{ url_for('comunidade') }}" class="nav-link"
+                ><i class="fas fa-users"></i> Comunidade</a
               >
             </li>
           </ul>
@@ -94,7 +111,7 @@
             class="btn btn-secondary header-cta desktop-only glow-effect"
             id="voltar-para-loja"
           >
-            Voltar para loja
+            <i class="fas fa-arrow-left"></i> Voltar para loja
           </a>
           <button class="menu-toggle" aria-label="Abrir menu">
             <i class="fas fa-bars"></i>
@@ -129,64 +146,76 @@
             <p class="field-hint">Exemplos prontos:</p>
             <div class="prompt-examples">
               <button
-                class="chip"
+                class="chip suggestion-chip"
                 type="button"
-                onclick="document.getElementById('prompt-input').value='dragon cyberpunk neon com tipografia agressiva'"
+                data-prompt="dragon cyberpunk neon com tipografia agressiva"
               >
-                Dragon cyberpunk
+                <i class="fas fa-dragon"></i> Dragon cyberpunk
               </button>
               <button
-                class="chip"
+                class="chip suggestion-chip"
                 type="button"
-                onclick="document.getElementById('prompt-input').value='kit casal minimalista com simbolos complementares'"
+                data-prompt="kit casal minimalista com simbolos complementares"
               >
-                Kit casal
+                <i class="fas fa-heart"></i> Kit casal
               </button>
               <button
-                class="chip"
+                class="chip suggestion-chip"
                 type="button"
-                onclick="document.getElementById('prompt-input').value='moletom para turma de formandos 2026 estilo streetwear'"
+                data-prompt="moletom para turma de formandos 2026 estilo streetwear"
               >
-                Turma de formandos
+                <i class="fas fa-user-graduate"></i> Turma de formandos
               </button>
               <button
-                class="chip"
+                class="chip suggestion-chip"
                 type="button"
-                onclick="document.getElementById('prompt-input').value='logo de equipe esport com escudo e glitch'"
+                data-prompt="logo de equipe esport com escudo e glitch"
               >
-                Equipe esport
+                <i class="fas fa-shield-halved"></i> Equipe esport
               </button>
             </div>
 
-            <div class="color-group" id="cores">
-              <span>Cor do moletom</span>
-              <label
-                ><input
-                  type="radio"
-                  name="color"
-                  value="preto"
-                  {% if (selected_color or '') == 'preto' %}checked{% endif %}
-                />
-                Preto</label
-              >
-              <label
-                ><input
-                  type="radio"
-                  name="color"
-                  value="branco"
-                  {% if (selected_color or '') == 'branco' %}checked{% endif %}
-                />
-                Branco</label
-              >
-              <label
-                ><input
-                  type="radio"
-                  name="color"
-                  value="vinho"
-                  {% if (selected_color or '') == 'vinho' %}checked{% endif %}
-                />
-                Vinho</label
-              >
+            <div class="color-layout" id="cores">
+              <div class="color-group">
+                <span>Cor do moletom</span>
+                <label class="color-option"
+                  ><input
+                    type="radio"
+                    name="color"
+                    value="preto"
+                    {% if (selected_color or '') == 'preto' %}checked{% endif %}
+                  />
+                  <span class="color-dot color-preto"></span>
+                  <span>Preto</span></label
+                >
+                <label class="color-option"
+                  ><input
+                    type="radio"
+                    name="color"
+                    value="branco"
+                    {% if (selected_color or '') == 'branco' %}checked{% endif %}
+                  />
+                  <span class="color-dot color-branco"></span>
+                  <span>Branco</span></label
+                >
+                <label class="color-option"
+                  ><input
+                    type="radio"
+                    name="color"
+                    value="vinho"
+                    {% if (selected_color or '') == 'vinho' %}checked{% endif %}
+                  />
+                  <span class="color-dot color-vinho"></span>
+                  <span>Vinho</span></label
+                >
+              </div>
+
+              <aside class="color-preview-card" id="color-preview-card">
+                <p class="color-preview-title">Preview da cor</p>
+                <div class="color-preview-swatch" id="color-preview-swatch"></div>
+                <p class="color-preview-name" id="color-preview-name">-</p>
+                <small>Essa base guia o contraste da estampa gerada.</small>
+              </aside>
             </div>
 
             <button class="btn btn-primary" type="submit">Gerar imagem</button>
@@ -194,13 +223,20 @@
 
           <div class="quick-actions">
             {% if session.get('user_id') %}
-            <a class="chip" href="{{ url_for('logout') }}">Sair</a>
+            <a class="chip action-chip" href="{{ url_for('logout') }}"
+              ><i class="fas fa-right-from-bracket"></i> Sair</a
+            >
             {% else %}
-            <a class="chip" href="{{ url_for('login', next='/generator') }}"
-              >Entrar</a
+            <a class="chip action-chip" href="{{ url_for('login', next='/generator') }}"
+              ><i class="fas fa-right-to-bracket"></i> Entrar</a
             >
             {% endif %}
-            <a class="chip" href="{{ url_for('home') }}">Voltar para loja</a>
+            <a class="chip action-chip" href="{{ url_for('home') }}"
+              ><i class="fas fa-store"></i> Voltar para loja</a
+            >
+            <a class="chip action-chip" href="{{ url_for('comunidade') }}"
+              ><i class="fas fa-users"></i> Galeria da Comunidade</a
+            >
           </div>
         </section>
       </main>

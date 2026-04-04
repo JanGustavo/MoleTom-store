@@ -33,6 +33,10 @@
       src="{{ url_for('static', filename='js/minha_conta.js') }}"
       defer
     ></script>
+    <script
+      src="{{ url_for('static', filename='js/header_scroll.js') }}"
+      defer
+    ></script>
   </head>
   <body class="page-shell">
     <div class="announcement-bar">
@@ -91,6 +95,11 @@
               <i class="fas fa-box"></i> Meus Pedidos
             </a>
           </li>
+          <li>
+            <a href="{{ url_for('comunidade') }}" class="nav-link">
+              <i class="fas fa-users"></i> Comunidade
+            </a>
+          </li>
         </ul>
 
         <div class="mobile-menu-footer">
@@ -108,7 +117,7 @@
           href="{{ url_for('generator') }}"
           class="btn-primary header-cta desktop-only glow-effect"
         >
-          Nova Arte
+          <i class="fas fa-wand-magic-sparkles"></i> Nova Arte
         </a>
         <button class="menu-toggle" aria-label="Abrir menu">
           <i class="fas fa-bars"></i>
@@ -183,6 +192,18 @@
           </div>
         </section>
 
+        <section class="account-card" style="padding: 30px">
+          <p class="eyebrow" style="margin-bottom: 20px">
+            <i class="fas fa-users"></i> Envios para Comunidade
+          </p>
+          <div id="community-submissions" class="account-list">
+            <p style="color: rgba(255, 255, 255, 0.5)">
+              <i class="fas fa-spinner fa-spin"></i> Carregando status da
+              curadoria...
+            </p>
+          </div>
+        </section>
+
         <div class="button-row">
           <a
             class="btn btn-primary glow-effect"
@@ -221,7 +242,9 @@
           <h3>Loja</h3>
           <ul>
             <li><a href="#">Gerar Estampa IA</a></li>
-            <li><a href="#">Galeria da Comunidade</a></li>
+            <li>
+              <a href="{{ url_for('comunidade') }}">Galeria da Comunidade</a>
+            </li>
             <li><a href="#">Guia de Tamanhos</a></li>
             <li><a href="#">Rastrear Pedido</a></li>
           </ul>

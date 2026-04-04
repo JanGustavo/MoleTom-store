@@ -24,6 +24,15 @@
     margin-bottom: 40px;
 }
 
+.checkout-nav {
+    margin: 16px 0 14px;
+}
+
+.checkout-nav ul {
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
 .checkout-header .brand-logo {
     font-size: 2rem;
     margin-bottom: 10px;
@@ -39,6 +48,12 @@
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 1px;
+}
+
+@media (max-width: 720px) {
+    .checkout-nav ul {
+        gap: 16px;
+    }
 }
 
 .stepper .active {

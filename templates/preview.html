@@ -21,6 +21,10 @@
       rel="stylesheet"
       href="{{ url_for('static', filename='css/preview.css') }}"
     />
+    <script
+      src="{{ url_for('static', filename='js/preview_share.js') }}"
+      defer
+    ></script>
   </head>
   <body>
     <main class="page-shell preview-shell">
@@ -44,6 +48,25 @@
               <p class="brand-subtitle">Streetwear personalizado sob demanda</p>
             </div>
           </div>
+          <nav class="nav-menu preview-nav" aria-label="Navegação principal">
+            <ul class="is-layout-flex">
+              <li>
+                <a href="{{ url_for('home') }}" class="nav-link"
+                  ><i class="fas fa-home"></i> Home</a
+                >
+              </li>
+              <li>
+                <a href="{{ url_for('generator') }}" class="nav-link active"
+                  ><i class="fas fa-wand-magic-sparkles"></i> Gerar Estampa</a
+                >
+              </li>
+              <li>
+                <a href="{{ url_for('minha_conta') }}" class="nav-link"
+                  ><i class="fas fa-user"></i> Minha Conta</a
+                >
+              </li>
+            </ul>
+          </nav>
           <div class="stepper">
             <span>1. Criação</span>
             <i class="fas fa-chevron-right" style="font-size: 0.7rem"></i>
@@ -119,6 +142,81 @@
                 </a>
               </div>
             </div>
+
+            <section class="share-card">
+              <h3>
+                <i class="fas fa-share-nodes"></i> Compartilhar e Comunidade
+              </h3>
+              <p>
+                Espalhe sua arte nas redes e envie para a galeria da comunidade
+                MoleTom.
+              </p>
+
+              <div class="share-actions">
+                <a
+                  class="btn-secondary"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href="https://wa.me/?text={{ ('Acabei de criar um design exclusivo na MoleTom: ' ~ url_for('comunidade', _external=True)) | urlencode }}"
+                >
+                  <i class="fab fa-whatsapp"></i> WhatsApp
+                </a>
+                <a
+                  class="btn-secondary"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href="https://twitter.com/intent/tweet?text={{ ('Minha nova arte MoleTom: ' ~ url_for('comunidade', _external=True)) | urlencode }}"
+                >
+                  <i class="fab fa-x-twitter"></i> X/Twitter
+                </a>
+                <button
+                  type="button"
+                  class="btn-secondary"
+                  id="copy-community-link"
+                  data-url="{{ url_for('comunidade', _external=True) }}"
+                >
+                  <i class="fas fa-link"></i> Copiar Link
+                </button>
+              </div>
+
+              {% if community_entry %}
+              <p class="share-status">
+                <i class="fas fa-circle-info"></i>
+                Status na comunidade:
+                <strong>{{ community_entry.status }}</strong>
+                {% if community_entry.status == 'approved' %} -
+                <a
+                  href="{{ url_for('comunidade_design', community_design_id=community_entry.id) }}"
+                  >ver publicação</a
+                >
+                {% endif %}
+              </p>
+              {% else %}
+              <div class="community-submit">
+                <input
+                  id="community-title"
+                  type="text"
+                  maxlength="120"
+                  placeholder="Título para sua arte na comunidade"
+                />
+                <textarea
+                  id="community-caption"
+                  maxlength="280"
+                  placeholder="Conte a inspiração da sua estampa (opcional)"
+                ></textarea>
+                <button
+                  type="button"
+                  class="btn-primary"
+                  id="submit-community-design"
+                  data-design-id="{{ design.id }}"
+                >
+                  <i class="fas fa-paper-plane"></i> Enviar para Curadoria
+                </button>
+              </div>
+              {% endif %}
+
+              <p id="community-feedback" class="share-status" hidden></p>
+            </section>
           </div>
         </section>
       </div>

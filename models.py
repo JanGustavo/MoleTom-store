@@ -17,6 +17,38 @@ class Design(db.Model):
         nullable=False,
     )
 
+
+class CommunityDesign(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    design_id = db.Column(db.Integer, db.ForeignKey("design.id"), nullable=False, unique=True, index=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False, index=True)
+    title = db.Column(db.String(120), nullable=False)
+    caption = db.Column(db.String(280), nullable=True)
+    status = db.Column(db.String(20), nullable=False, default="pending", index=True)
+    votes_count = db.Column(db.Integer, nullable=False, default=0)
+    curator_note = db.Column(db.String(280), nullable=True)
+    approved_at = db.Column(db.DateTime(timezone=True), nullable=True)
+    created_at = db.Column(
+        db.DateTime(timezone=True),
+        default=lambda: datetime.now(timezone.utc),
+        nullable=False,
+    )
+
+
+class CommunityVote(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    community_design_id = db.Column(db.Integer, db.ForeignKey("community_design.id"), nullable=False, index=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False, index=True)
+    created_at = db.Column(
+        db.DateTime(timezone=True),
+        default=lambda: datetime.now(timezone.utc),
+        nullable=False,
+    )
+
+    __table_args__ = (
+        db.UniqueConstraint("community_design_id", "user_id", name="ux_vote_design_user"),
+    )
+
 class Pedido(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     design_id = db.Column(db.Integer, db.ForeignKey("design.id"), nullable=False)

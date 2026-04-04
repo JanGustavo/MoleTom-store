@@ -29,6 +29,10 @@
       src="{{ url_for('static', filename='js/index.js') }}"
       defer
     ></script>
+    <script
+      src="{{ url_for('static', filename='js/header_scroll.js') }}"
+      defer
+    ></script>
   </head>
   <body class="page-shell">
     <div class="announcement-bar">
@@ -80,6 +84,11 @@
               ><i class="fas fa-box"></i> Meus Pedidos</a
             >
           </li>
+          <li>
+            <a href="{{ url_for('comunidade') }}" class="nav-link"
+              ><i class="fas fa-users"></i> Comunidade</a
+            >
+          </li>
         </ul>
 
         <div class="mobile-menu-footer">
@@ -103,7 +112,7 @@
         <a
           href="{{ url_for('generator') }}"
           class="btn-primary header-cta desktop-only glow-effect"
-          >Criar Agora</a
+          ><i class="fas fa-wand-magic-sparkles"></i> Criar Agora</a
         >
         <button class="menu-toggle" aria-label="Abrir menu">
           <i class="fas fa-bars"></i>
@@ -333,7 +342,7 @@
             Participe ou crie designs para a comunidade MoleTom e deixe sua
             marca no mundo.
           </p>
-          <a href="{{ url_for('generator') }}" class="buy-button">
+          <a href="{{ url_for('comunidade') }}" class="buy-button">
             <i class="fas fa-cart-plus"></i> Explorar Designs
           </a>
         </article>
@@ -422,7 +431,9 @@
           <h3>Loja</h3>
           <ul>
             <li><a href="#">Gerar Estampa IA</a></li>
-            <li><a href="#">Galeria da Comunidade</a></li>
+            <li>
+              <a href="{{ url_for('comunidade') }}">Galeria da Comunidade</a>
+            </li>
             <li><a href="#">Guia de Tamanhos</a></li>
             <li><a href="#">Rastrear Pedido</a></li>
           </ul>

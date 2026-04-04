@@ -21,6 +21,15 @@
     margin-bottom: 40px;
 }
 
+.preview-nav {
+    margin: 16px 0 14px;
+}
+
+.preview-nav ul {
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
 .preview-header .brand-logo {
     font-size: 2rem;
     margin-bottom: 15px;
@@ -157,6 +166,64 @@
     border-color: rgba(0, 188, 212, 0.48);
 }
 
+.share-card {
+    margin-top: 22px;
+    padding: 18px;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.share-card h3 {
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.share-card p {
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 0.9rem;
+}
+
+.share-actions {
+    margin-top: 12px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.community-submit {
+    margin-top: 14px;
+    display: grid;
+    gap: 10px;
+}
+
+.community-submit input,
+.community-submit textarea {
+    width: 100%;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(0, 0, 0, 0.3);
+    color: #fff;
+    padding: 10px 12px;
+    outline: none;
+}
+
+.community-submit textarea {
+    min-height: 90px;
+    resize: vertical;
+}
+
+.share-status {
+    margin-top: 12px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: rgba(0, 188, 212, 0.08);
+    border: 1px solid rgba(0, 188, 212, 0.2);
+}
+
 /* Responsivo */
 @media (max-width: 900px) {
     .preview-grid {
@@ -180,187 +247,14 @@
     .secondary-actions {
         flex-direction: column;
     }
-}/* preview.css - Estúdio de Aprovação (Padrão MoleTom) */
-
-.preview-shell {
-    min-height: 100vh;
-    padding: 40px 20px;
-    background: radial-gradient(circle at 50% 50%, rgba(98, 0, 238, 0.08), transparent 60%), #0a0b0c;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
-.preview-container {
-    width: 100%;
-    max-width: 1100px;
-    margin: 0 auto;
-}
-
-/* Header Simplificado (Funil Fechado) */
-.preview-header {
-    text-align: center;
-    margin-bottom: 40px;
-}
-
-.preview-header .brand-logo {
-    font-size: 2rem;
-    margin-bottom: 15px;
-    color: #fff;
-}
-
-.stepper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 15px;
-    color: rgba(255, 255, 255, 0.4);
-    font-size: 0.85rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.stepper .active {
-    color: var(--primary-color, #6200EE);
-}
-
-/* Layout do Preview */
-.preview-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 50px;
-    align-items: center;
-    background: rgba(20, 22, 24, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 24px;
-    padding: 40px;
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-}
-
-/* Vitrine da Imagem */
-.hoodie-showcase {
-    position: relative;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.hoodie-showcase img {
-    width: 100%;
-    max-width: 450px;
-    filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.4));
-    animation: float 6s ease-in-out infinite;
-    border-radius: 12px;
-}
-
-.print {
-    position: absolute;
-    top: 40%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 30%;
-    max-width: 180px;
-}
-
-/* Informações do Lado Direito */
-.preview-info h1 {
-    font-size: clamp(2rem, 3vw, 2.5rem);
-    margin-bottom: 15px;
-    line-height: 1.1;
-}
-
-.spec-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 25px;
-}
-
-.spec-tags span {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 6px 14px;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.9);
-}
-
-.prompt-box {
-    background: rgba(0, 0, 0, 0.4);
-    border-left: 4px solid var(--primary-color, #6200EE);
-    padding: 15px 20px;
-    border-radius: 0 8px 8px 0;
-    margin: 15px 0 30px 0;
-    font-style: italic;
-    color: rgba(255, 255, 255, 0.8);
-    line-height: 1.5;
-}
-
-/* Botões Modernos */
-.action-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.action-buttons .btn-primary {
-    padding: 18px;
-    text-align: center;
-    font-size: 1.1rem;
-    border-radius: 12px;
-    font-weight: bold;
-}
-
-.secondary-actions {
-    display: flex;
-    gap: 15px;
-}
-
-.secondary-actions .btn-secondary {
-    flex: 1;
-    padding: 14px;
-    text-align: center;
-    border-radius: 10px;
-    font-size: 0.95rem;
-    background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: rgba(255, 255, 255, 0.8);
-    text-decoration: none;
-    transition: 0.3s;
-}
-
-.secondary-actions .btn-secondary:hover {
-    background: rgba(255, 255, 255, 0.05);
-    color: #fff;
-    border-color: #fff;
-}
-
-/* Responsivo */
-@media (max-width: 900px) {
-    .preview-grid {
-        grid-template-columns: 1fr;
-        padding: 25px;
-        text-align: center;
+@media (max-width: 720px) {
+    .preview-nav ul {
+        gap: 16px;
     }
 
-    .hoodie-showcase {
-        order: -1;
-        /* Joga a imagem para cima no celular */
-    }
-
-    .spec-tags {
-        justify-content: center;
-    }
-
-    .prompt-box {
-        text-align: left;
-    }
-
-    .secondary-actions {
-        flex-direction: column;
+    .stepper {
+        flex-wrap: wrap;
     }
 }

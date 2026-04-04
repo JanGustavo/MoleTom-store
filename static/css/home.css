@@ -38,9 +38,9 @@ body {
 
 /* Header Aprimorado */
 .header-wrapper {
-    background: rgba(14, 16, 16, 0.82);
+    background: rgba(14, 16, 16, 0.28);
     backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 /* --- HEADER FIXO E APRIMORADO --- */
@@ -48,7 +48,13 @@ body {
     position: sticky;
     top: 0;
     z-index: 1000;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+    box-shadow: none;
+}
+
+.sticky-header.scrolled {
+    background: rgba(14, 16, 16, 0.9);
+    border-bottom-color: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
 }
 
 .header-actions {
@@ -428,7 +434,7 @@ body {
         transition: transform 0.4s cubic-bezier(0.77, 0, 0.175, 1);
         box-shadow: -10px 0 40px rgba(0, 0, 0, 0.8);
         overflow-y: auto;
-        z-index: 999;
+        z-index: 1200;
     }
 
     .nav-menu.active {
@@ -515,9 +521,34 @@ body {
 
     .menu-toggle {
         display: block;
-        z-index: 1000;
+        z-index: 1300;
         position: relative;
     }
+
+    .menu-toggle.is-open {
+        position: fixed;
+        top: 14px;
+        right: 14px;
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(14, 16, 16, 0.9);
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        backdrop-filter: blur(8px);
+    }
+
+    .menu-toggle.is-open i {
+        font-size: 20px;
+    }
+}
+
+html.menu-open,
+body.menu-open {
+    overflow: hidden;
+    overscroll-behavior: none;
 }
 
 /* Oculta elementos exclusivos do mobile quando estiver no PC */

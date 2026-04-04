@@ -1,5 +1,13 @@
 /* generator.css - estilos específicos da página de geração */
 
+.page-shell {
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at 18% 18%, rgba(0, 188, 212, 0.14), transparent 34%),
+        radial-gradient(circle at 82% 82%, rgba(255, 0, 127, 0.1), transparent 32%),
+        linear-gradient(180deg, #0b0f17 0%, #0e1010 52%, #090b0d 100%);
+}
+
 .container {
     padding-top: 26px;
     padding-bottom: 42px;
@@ -51,13 +59,32 @@
     margin-top: -6px;
 }
 
+.suggestion-chip {
+    border-color: rgba(255, 255, 255, 0.16);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.04));
+    font-weight: 600;
+}
+
+.suggestion-chip:hover {
+    border-color: rgba(0, 188, 212, 0.55);
+    box-shadow: 0 10px 24px rgba(0, 188, 212, 0.16);
+}
+
 .color-group {
     display: grid;
     gap: 8px;
 }
 
+.color-layout {
+    display: grid;
+    grid-template-columns: 1fr 220px;
+    gap: 14px;
+    align-items: start;
+}
+
 .color-group > span {
     font-weight: 600;
+    margin-bottom: 4px;
 }
 
 .color-group label {
@@ -65,4 +92,97 @@
     align-items: center;
     gap: 8px;
     color: rgba(255, 255, 255, 0.86);
+}
+
+.color-option {
+    position: relative;
+    min-height: 44px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    padding: 0 12px;
+    background: rgba(255, 255, 255, 0.03);
+    transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
+}
+
+.color-option:hover {
+    border-color: rgba(0, 188, 212, 0.45);
+    transform: translateY(-1px);
+}
+
+.color-option:has(input:checked) {
+    border-color: rgba(0, 188, 212, 0.65);
+    background: rgba(0, 188, 212, 0.1);
+}
+
+.color-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+.color-preto {
+    background: #111827;
+}
+
+.color-branco {
+    background: #f8fafc;
+}
+
+.color-vinho {
+    background: #6d1830;
+}
+
+.color-preview-card {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 14px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.color-preview-title {
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 8px;
+}
+
+.color-preview-swatch {
+    width: 100%;
+    height: 72px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: #111827;
+}
+
+.color-preview-name {
+    margin-top: 8px;
+    font-weight: 700;
+}
+
+.color-preview-card small {
+    color: rgba(255, 255, 255, 0.6);
+    line-height: 1.4;
+}
+
+.action-chip {
+    font-weight: 700;
+    border-color: rgba(0, 188, 212, 0.3);
+    background: linear-gradient(180deg, rgba(0, 188, 212, 0.14), rgba(255, 255, 255, 0.04));
+}
+
+.action-chip:hover {
+    border-color: rgba(0, 188, 212, 0.62);
+    box-shadow: 0 10px 24px rgba(0, 188, 212, 0.18);
+}
+
+@media (max-width: 760px) {
+    .color-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .color-preview-card {
+        max-width: none;
+    }
 }

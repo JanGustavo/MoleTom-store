@@ -1,11 +1,12 @@
 from functools import wraps
 import hashlib
+import os
 import re
 
 from flask import Flask, Response, jsonify, render_template, request, redirect, url_for, session
 from sqlalchemy import text
 from sqlalchemy.exc import IntegrityError
-from models import db, Design, User
+from models import db, Design, User, CommunityDesign, CommunityVote
 from ai_generator import generate_design
 
 app = Flask(__name__)
@@ -57,6 +58,15 @@ def _ensure_design_schema():
 with app.app_context():
     _ensure_user_schema()
     _ensure_design_schema()
+
+
+def _is_curator(user: User | None) -> bool:
+    if user is None:
+        return False
+
+    raw = os.environ.get("MOLETOM_CURATORS", "admin,curadoria,moderador")
+    curators = {item.strip().lower() for item in raw.split(",") if item.strip()}
+    return user.id == 1 or (user.username or "").lower() in curators
 
 
 def login_required(view):
@@ -117,6 +127,39 @@ def api_avatar():
 @app.route("/")
 def home():
     return render_template("index.html")
+
+
+@app.route("/comunidade")
+def comunidade():
+    user = db.session.get(User, session.get("user_id")) if session.get("user_id") else None
+    can_moderate = _is_curator(user)
+
+    entries = (
+        db.session.query(CommunityDesign, Design, User)
+        .join(Design, Design.id == CommunityDesign.design_id)
+        .join(User, User.id == CommunityDesign.user_id)
+        .filter(CommunityDesign.status == "approved")
+        .order_by(CommunityDesign.votes_count.desc(), CommunityDesign.approved_at.desc(), CommunityDesign.created_at.desc())
+        .limit(60)
+        .all()
+    )
+
+    return render_template("comunidade.html", entries=entries, can_moderate=can_moderate)
+
+
+@app.route("/comunidade/design/<int:community_design_id>")
+def comunidade_design(community_design_id):
+    user = db.session.get(User, session.get("user_id")) if session.get("user_id") else None
+    can_moderate = _is_curator(user)
+
+    entry = (
+        db.session.query(CommunityDesign, Design, User)
+        .join(Design, Design.id == CommunityDesign.design_id)
+        .join(User, User.id == CommunityDesign.user_id)
+        .filter(CommunityDesign.id == community_design_id, CommunityDesign.status == "approved")
+        .first_or_404()
+    )
+    return render_template("comunidade_design.html", entry=entry, can_moderate=can_moderate)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -255,6 +298,12 @@ def api_minha_conta():
 
     user_designs_query = Design.query.filter_by(user_id=user.id)
     recent_designs = user_designs_query.order_by(Design.created_at.desc()).limit(6).all()
+    community_entries = (
+        CommunityDesign.query.filter_by(user_id=user.id)
+        .order_by(CommunityDesign.created_at.desc())
+        .limit(6)
+        .all()
+    )
 
     return jsonify(
         {
@@ -279,8 +328,133 @@ def api_minha_conta():
                 }
                 for design in recent_designs
             ],
+            "community_submissions": [
+                {
+                    "id": entry.id,
+                    "design_id": entry.design_id,
+                    "title": entry.title,
+                    "status": entry.status,
+                    "votes_count": entry.votes_count,
+                    "created_at": entry.created_at.isoformat() if entry.created_at else None,
+                }
+                for entry in community_entries
+            ],
         }
     )
+
+
+@app.route("/api/comunidade/enviar", methods=["POST"])
+@login_required
+def api_comunidade_enviar():
+    data = request.get_json(silent=True) or {}
+    design_id = data.get("design_id")
+    title = (data.get("title") or "").strip()
+    caption = (data.get("caption") or "").strip()
+
+    if not design_id:
+        return jsonify({"error": "Design invalido."}), 400
+
+    design = Design.query.filter_by(id=design_id, user_id=session.get("user_id")).first()
+    if design is None:
+        return jsonify({"error": "Design nao encontrado para este usuario."}), 404
+
+    existing = CommunityDesign.query.filter_by(design_id=design.id).first()
+    if existing:
+        return jsonify(
+            {
+                "message": "Este design ja foi enviado para a comunidade.",
+                "community_design_id": existing.id,
+                "status": existing.status,
+            }
+        )
+
+    safe_title = title[:120] if title else f"Arte #{design.id}"
+    safe_caption = caption[:280] if caption else None
+
+    entry = CommunityDesign(
+        design_id=design.id,
+        user_id=session.get("user_id"),
+        title=safe_title,
+        caption=safe_caption,
+        status="pending",
+    )
+
+    db.session.add(entry)
+    db.session.commit()
+
+    return jsonify(
+        {
+            "message": "Design enviado para curadoria com sucesso.",
+            "community_design_id": entry.id,
+            "status": entry.status,
+        }
+    )
+
+
+@app.route("/api/comunidade/votar/<int:community_design_id>", methods=["POST"])
+@login_required
+def api_comunidade_votar(community_design_id):
+    entry = CommunityDesign.query.filter_by(id=community_design_id, status="approved").first()
+    if entry is None:
+        return jsonify({"error": "Design da comunidade nao encontrado."}), 404
+
+    user_id = session.get("user_id")
+    existing_vote = CommunityVote.query.filter_by(community_design_id=entry.id, user_id=user_id).first()
+    if existing_vote:
+        return jsonify({"error": "Voce ja votou neste design."}), 409
+
+    vote = CommunityVote(community_design_id=entry.id, user_id=user_id)
+    entry.votes_count += 1
+    db.session.add(vote)
+    db.session.commit()
+
+    return jsonify({"message": "Voto contabilizado.", "votes_count": entry.votes_count})
+
+
+@app.route("/curadoria/comunidade", methods=["GET", "POST"])
+@login_required
+def curadoria_comunidade():
+    user = db.session.get(User, session.get("user_id"))
+    if not _is_curator(user):
+        return redirect(url_for("comunidade"))
+
+    feedback = None
+
+    if request.method == "POST":
+        entry_id = request.form.get("entry_id", type=int)
+        action = (request.form.get("action") or "").strip()
+        note = (request.form.get("note") or "").strip()[:280]
+
+        entry = CommunityDesign.query.filter_by(id=entry_id, status="pending").first()
+        if entry is None:
+            feedback = "Registro nao encontrado ou ja moderado."
+        else:
+            if action == "approve":
+                from datetime import datetime, timezone
+
+                entry.status = "approved"
+                entry.approved_at = datetime.now(timezone.utc)
+                entry.curator_note = note or None
+                feedback = "Design aprovado e publicado na galeria."
+                db.session.commit()
+            elif action == "reject":
+                entry.status = "rejected"
+                entry.curator_note = note or None
+                feedback = "Design reprovado na curadoria."
+                db.session.commit()
+            else:
+                feedback = "Acao invalida."
+
+    pending_entries = (
+        db.session.query(CommunityDesign, Design, User)
+        .join(Design, Design.id == CommunityDesign.design_id)
+        .join(User, User.id == CommunityDesign.user_id)
+        .filter(CommunityDesign.status == "pending")
+        .order_by(CommunityDesign.created_at.asc())
+        .all()
+    )
+
+    return render_template("curadoria_comunidade.html", pending_entries=pending_entries, feedback=feedback)
 
 @app.route("/generator", methods=["GET", "POST"])
 def generator():
@@ -331,8 +505,9 @@ def generator():
 @login_required
 def preview(design_id):
     design = Design.query.filter_by(id=design_id, user_id=session.get("user_id")).first_or_404()
+    community_entry = CommunityDesign.query.filter_by(design_id=design.id).first()
 
-    return render_template("preview.html", design=design)
+    return render_template("preview.html", design=design, community_entry=community_entry)
 
 
 @app.route("/checkout/<int:design_id>", methods=["GET", "POST"])

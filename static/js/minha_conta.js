@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const totalDesigns = document.getElementById("account-total-designs");
     const recentCount = document.getElementById("account-recent-count");
     const recentDesigns = document.getElementById("recent-designs");
+    const communitySubmissions = document.getElementById("community-submissions");
     const errorBox = document.getElementById("account-error");
 
     const showError = (message) => {
@@ -68,9 +69,44 @@ document.addEventListener("DOMContentLoaded", async () => {
                 `;
             })
             .join("");
+
+        const submissions = data.community_submissions || [];
+        if (communitySubmissions) {
+            if (submissions.length === 0) {
+                communitySubmissions.innerHTML = `
+                    <div style="text-align: center; padding: 30px 20px; width: 100%; grid-column: 1 / -1; border: 1px dashed rgba(255,255,255,0.2); border-radius: 12px;">
+                        <p style="color: rgba(255,255,255,0.6);">Você ainda não enviou artes para curadoria. Use o preview para publicar na comunidade.</p>
+                    </div>
+                `;
+            } else {
+                communitySubmissions.innerHTML = submissions
+                    .map((item) => {
+                        const statusMap = {
+                            approved: "Aprovado",
+                            pending: "Em curadoria",
+                            rejected: "Rejeitado",
+                        };
+                        const statusLabel = statusMap[item.status] || item.status;
+                        return `
+                            <a class="account-list-item" href="/preview/${item.design_id}">
+                                <div>
+                                    <strong>${item.title}</strong>
+                                    <p>Status: ${statusLabel}</p>
+                                    <span class="item-badge"><i class="fas fa-fire"></i> ${item.votes_count} votos</span>
+                                </div>
+                                <i class="fas fa-chevron-right" style="color: rgba(255,255,255,0.2); margin-left: auto;"></i>
+                            </a>
+                        `;
+                    })
+                    .join("");
+            }
+        }
             
     } catch (error) {
         recentDesigns.innerHTML = ""; // Limpa o loader se der erro
+        if (communitySubmissions) {
+            communitySubmissions.innerHTML = "";
+        }
         showError(error.message || "Erro inesperado ao carregar sua conta.");
     }
 });
