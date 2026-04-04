@@ -1,0 +1,110 @@
+{# Header Component - Reutilizável em todas as páginas #}
+
+<div class="announcement-bar">
+  <p>
+    {{ announcement_text | default("🚀 Liberte sua criatividade: Gere seu 1º
+    moletom totalmente de graça por tempo limitado!") }}
+  </p>
+</div>
+
+<header class="header-wrapper sticky-header">
+  <div class="header-brand">
+    <div class="logo-circle">
+      <img
+        class="logo-circle-img"
+        src="{{ url_for('static', filename='img/logo2.png') }}"
+        alt="MoleTom"
+      />
+    </div>
+    <div class="header-content">
+      <a href="{{ url_for('home') }}" class="brand-logo brand-title brand-mark"
+        ><span class="brand-mole">MOLE</span
+        ><span class="brand-tom">TOM</span></a
+      >
+      <p class="brand-subtitle desktop-only">
+        {{ brand_subtitle | default("Streetwear por IA") }}
+      </p>
+    </div>
+  </div>
+
+  <nav class="nav-menu" aria-label="Navegação principal">
+    <div class="mobile-menu-header">
+      <a href="{{ url_for('home') }}" class="brand-logo brand-title brand-mark"
+        ><span class="brand-mole">MOLE</span
+        ><span class="brand-tom">TOM</span></a
+      >
+    </div>
+
+    <ul class="is-layout-flex">
+      <li>
+        <a
+          href="{{ url_for('home') }}"
+          class="nav-link {% if nav_active == 'home' %}active{% endif %}"
+          ><i class="fas fa-home"></i> Home</a
+        >
+      </li>
+      <li>
+        <a
+          href="{{ url_for('generator') }}"
+          class="nav-link highlight-link {% if nav_active == 'generator' %}active{% endif %}"
+          ><i class="fas fa-wand-magic-sparkles"></i> Gerar Estampa</a
+        >
+      </li>
+      <li>
+        <a
+          href="{{ url_for('minha_conta') }}"
+          class="nav-link {% if nav_active == 'minha_conta' %}active{% endif %}"
+          ><i class="fas fa-box"></i> Meus Pedidos</a
+        >
+      </li>
+      <li>
+        <a
+          href="{{ url_for('comunidade') }}"
+          class="nav-link {% if nav_active == 'comunidade' %}active{% endif %}"
+          ><i class="fas fa-users"></i> Comunidade</a
+        >
+      </li>
+      {% if can_moderate %}
+      <li>
+        <a
+          href="{{ url_for('curadoria_comunidade') }}"
+          class="nav-link {% if nav_active == 'curadoria' %}active{% endif %}"
+          ><i class="fas fa-gavel"></i> Curadoria</a
+        >
+      </li>
+      {% endif %}
+    </ul>
+
+    <div class="mobile-menu-footer">
+      <a href="{{ url_for('minha_conta') }}" class="profile-pill">
+        <div class="profile-avatar-small">
+          <span>{{ session.get('username', 'M')[:1] | upper }}</span>
+        </div>
+        <span>Meu Perfil</span>
+      </a>
+    </div>
+  </nav>
+
+  <div class="header-actions">
+    {% if show_curator_button and can_moderate %}
+    <a
+      href="{{ url_for('curadoria_comunidade') }}"
+      class="btn-secondary header-cta desktop-only"
+    >
+      <i class="fas fa-gavel"></i> Curadoria
+    </a>
+    {% endif %} {% if show_cta_button %}
+    <a
+      href="{{ cta_link | default(url_for('generator')) }}"
+      class="btn-primary header-cta desktop-only glow-effect"
+    >
+      <i class="fas fa-wand-magic-sparkles"></i> {{ cta_text | default("Criar
+      Agora") }}
+    </a>
+    {% endif %}
+
+    <button class="menu-toggle" aria-label="Abrir menu">
+      <i class="fas fa-bars"></i>
+    </button>
+  </div>
+</header>

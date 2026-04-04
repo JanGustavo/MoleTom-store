@@ -17,8 +17,18 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
+    <script
+      src="{{ url_for('static', filename='js/header.js') }}"
+      defer
+    ></script>
+    <script
+      src="{{ url_for('static', filename='js/header_scroll.js') }}"
+      defer
+    ></script>
   </head>
   <body class="page-shell community-shell">
+    {% set nav_active = 'comunidade' %} {% set brand_subtitle = 'Detalhes do
+    Design' %} {% include '_header.html' %}
     <main class="container community-detail">
       {% set community = entry[0] %} {% set design = entry[1] %} {% set user =
       entry[2] %}
