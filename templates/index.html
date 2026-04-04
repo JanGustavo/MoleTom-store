@@ -1,43 +1,468 @@
 <!doctype html>
 <html lang="pt-BR">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>MoleTom | Crie seu moletom</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MOLE TOM | Sua Identidade, Seu Moletom</title>
+
+    <link rel="icon" href="{{ url_for('static', filename='img/logo2.png') }}" />
+    <link
+      rel="apple-touch-icon"
+      href="{{ url_for('static', filename='img/logo2.png') }}"
+    />
+
     <link
       rel="stylesheet"
       href="{{ url_for('static', filename='css/style.css') }}"
     />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/home.css') }}"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <script
+      src="{{ url_for('static', filename='js/index.js') }}"
+      defer
+    ></script>
   </head>
-  <body>
-    <main class="page-shell hero-shell">
-      <section class="hero-card">
-        <p class="eyebrow">Moletom personalizado com IA</p>
-        <h1>Crie estampas únicas para o seu moletom.</h1>
-        <p class="hero-copy">
-          Escreva o prompt, escolha a cor e gere a arte do peito em poucos
-          segundos.
-        </p>
-        <div class="button-row">
-          <a class="btn btn-primary" href="{{ url_for('generator') }}"
-            >Gerar meu moletom</a
+  <body class="page-shell">
+    <div class="announcement-bar">
+      <p>
+        🚀 <strong>Liberte sua criatividade:</strong> Gere seu 1º moletom
+        totalmente de graça por tempo limitado!
+      </p>
+    </div>
+
+    <header class="header-wrapper sticky-header">
+      <div class="header-brand">
+        <div class="logo-circle">
+          <img
+            class="logo-circle-img"
+            src="{{ url_for('static', filename='img/logo2.png') }}"
+            alt="MoleTom"
+          />
+        </div>
+        <div class="header-content">
+          <a href="#" class="brand-logo brand-title brand-mark"
+            ><span class="brand-mole">MOLE</span
+            ><span class="brand-tom">TOM</span></a
           >
-          <a class="btn btn-secondary" href="{{ url_for('generator') }}#cores"
-            >Ver cores</a
+          <p class="brand-subtitle desktop-only">Streetwear por IA</p>
+        </div>
+      </div>
+
+      <nav class="nav-menu">
+        <div class="mobile-menu-header">
+          <a href="#" class="brand-logo brand-title brand-mark"
+            ><span class="brand-mole">MOLE</span
+            ><span class="brand-tom">TOM</span></a
           >
         </div>
-        <div class="quick-actions">
-          <a class="chip" href="{{ url_for('generator') }}?color=preto"
-            >Preto</a
+
+        <ul class="is-layout-flex">
+          <li>
+            <a href="{{ url_for('home') }}" class="nav-link active"
+              ><i class="fas fa-home"></i> Home</a
+            >
+          </li>
+          <li>
+            <a href="{{ url_for('generator') }}" class="nav-link highlight-link"
+              ><i class="fas fa-wand-magic-sparkles"></i> Gerar Estampa</a
+            >
+          </li>
+          <li>
+            <a href="{{ url_for('minha_conta') }}" class="nav-link"
+              ><i class="fas fa-box"></i> Meus Pedidos</a
+            >
+          </li>
+        </ul>
+
+        <div class="mobile-menu-footer">
+          <a href="{{ url_for('minha_conta') }}" class="profile-pill">
+            <div class="profile-avatar-small">
+              <span>{{ session.get('username', 'M')[:1] | upper }}</span>
+            </div>
+            <span>Meu Perfil</span>
+          </a>
+        </div>
+      </nav>
+
+      <div class="header-actions">
+        <a
+          href="{{ url_for('minha_conta') }}"
+          class="profile-link desktop-only"
+          aria-label="Ir para minha conta"
+        >
+          <i class="fas fa-user-circle" style="font-size: 1.5rem"></i>
+        </a>
+        <a
+          href="{{ url_for('generator') }}"
+          class="btn-primary header-cta desktop-only glow-effect"
+          >Criar Agora</a
+        >
+        <button class="menu-toggle" aria-label="Abrir menu">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="hero">
+        <div class="hero-content reveal-init">
+          <div class="badge-tech">Powered by FLUX.1 AI</div>
+          <h1 class="hero-title">
+            Vista a sua <br /><span class="text-gradient"
+              >própria história.</span
+            >
+          </h1>
+          <p class="hero-subtitle">
+            A peça é sua, o design é seu. Use nossa inteligência artificial para
+            manifestar moletons <strong>únicos no mundo.</strong> O 1º modelo é
+            por nossa conta.
+          </p>
+          <div class="hero-actions">
+            <a
+              href="{{ url_for('generator') }}"
+              class="btn-primary btn-large glow-effect"
+            >
+              <i class="fas fa-wand-magic-sparkles"></i> Gerar Meu Moletom
+              Grátis
+            </a>
+          </div>
+          <div class="social-proof">
+            <div class="avatars">
+              <img src="https://i.pravatar.cc/100?img=1" alt="User" />
+              <img src="https://i.pravatar.cc/100?img=2" alt="User" />
+              <img src="https://i.pravatar.cc/100?img=3" alt="User" />
+              <img src="https://i.pravatar.cc/100?img=4" alt="User" />
+            </div>
+            <p>Mais de <strong>5.000+</strong> estilos gerados essa semana.</p>
+          </div>
+        </div>
+        <div class="hero-mockup reveal-init">
+          <div class="hoodie-preview">
+            <img
+              src="{{ url_for('static', filename='img/moletomLuffy.jpg') }}"
+              alt="Moletom personalizado com design de IA"
+            />
+            <div class="floating-badge">
+              <i class="fas fa-check-circle"></i> 100% Algodão Premium
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="trust-bar-section header-dashboard reveal-init">
+        <h2>Sua Experiência, Nossa Prioridade</h2>
+        <p>Confiabilidade e qualidade em cada etapa da sua jornada criativa.</p>
+        <div class="trust-grid feature-grid">
+          <div class="trust-item tool-card glass-card">
+            <div class="card-icon"><i class="fas fa-shield-alt"></i></div>
+            <h3>Pagamento Seguro</h3>
+            <p>
+              Transações criptografadas e protegidas para sua tranquilidade.
+            </p>
+          </div>
+          <div class="trust-item tool-card glass-card">
+            <div class="card-icon"><i class="fas fa-headset"></i></div>
+            <h3>Suporte 24/7</h3>
+            <p>Nossa equipe está sempre pronta para ajudar, a qualquer hora.</p>
+          </div>
+          <div class="trust-item tool-card glass-card">
+            <div class="card-icon"><i class="fas fa-gem"></i></div>
+            <h3>Qualidade Premium</h3>
+            <p>
+              Moletons e estampas de alta durabilidade, feitos para
+              impressionar.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="header-dashboard reveal-init" style="margin-top: 60px">
+        <h2>O Poder da Exclusividade</h2>
+        <p>Como transformamos sua visão em realidade tecnológica</p>
+      </section>
+
+      <div class="feature-grid tools-grid">
+        <div class="tool-card glass-card reveal-init">
+          <div class="card-icon">
+            <i class="fas fa-fingerprint"></i>
+          </div>
+          <h3>Identidade Única</h3>
+          <p>
+            Cada estampa é gerada exclusivamente para você. Sem cópias, sem
+            repetições. Apenas sua essência.
+          </p>
+        </div>
+
+        <div class="tool-card glass-card reveal-init">
+          <div class="card-icon">
+            <i class="fas fa-robot"></i>
+          </div>
+          <h3>IA como Ferramenta</h3>
+          <p>
+            Nosso motor procedural traduz seus desejos em artes complexas,
+            garantindo harmonia visual e impacto.
+          </p>
+        </div>
+
+        <div class="tool-card glass-card reveal-init">
+          <div class="card-icon">
+            <i class="fas fa-layer-group"></i>
+          </div>
+          <h3>Qualidade Techwear</h3>
+          <p>
+            Tecidos premium com acabamento minimalista, feitos para durar e
+            destacar sua criação.
+          </p>
+        </div>
+      </div>
+
+      <section class="header-dashboard reveal-init" style="margin-top: 60px">
+        <h2>Personalize Para Cada Momento</h2>
+        <p>Crie coleções sob medida que conectam pessoas e propósitos.</p>
+      </section>
+
+      <div class="personalization-grid">
+        <article class="persona-card glass-card reveal-init">
+          <div class="persona-media">
+            <img
+              src="{{ url_for('static', filename='img/moletom_casal.png') }}"
+              alt="Kit Casal"
+            />
+            <span class="persona-tag">Conexão</span>
+          </div>
+          <h3>Kit Casal</h3>
+          <p>
+            Artes que se completam. Personalize frases e símbolos que só vocês
+            entendem.
+          </p>
+          <a href="{{ url_for('generator') }}" class="buy-button">
+            <i class="fas fa-cart-plus"></i> Personalizar Agora
+          </a>
+        </article>
+
+        <article class="persona-card glass-card reveal-init">
+          <div class="persona-media">
+            <img
+              src="{{ url_for('static', filename='img/moletomCodar.png') }}"
+              alt="Turmas"
+            />
+            <span class="persona-tag">Legado</span>
+          </div>
+          <h3>Turmas & Formandos</h3>
+          <p>
+            Marque sua jornada com uma identidade visual que une a turma toda em
+            um design épico.
+          </p>
+          <a href="{{ url_for('generator') }}" class="buy-button">
+            <i class="fas fa-cart-plus"></i> Criar para Turma
+          </a>
+        </article>
+
+        <article class="persona-card glass-card reveal-init">
+          <div class="persona-media">
+            <img
+              src="{{ url_for('static', filename='img/MoletomEvento.jpg') }}"
+              alt="Eventos"
+            />
+            <span class="persona-tag">Impacto</span>
+          </div>
+          <h3>Eventos & Campanhas</h3>
+          <p>
+            Transforme seu evento em uma experiência visual inesquecível com
+            moletons exclusivos.
+          </p>
+          <a href="{{ url_for('generator') }}" class="buy-button">
+            <i class="fas fa-cart-plus"></i> Solicitar Lote
+          </a>
+        </article>
+
+        <article class="persona-card glass-card reveal-init">
+          <div class="persona-media">
+            <img
+              src="{{ url_for('static', filename='img/tecTudo.jpg') }}"
+              alt="Equipes"
+            />
+            <span class="persona-tag">Unidade</span>
+          </div>
+          <h3>Times & Empresas</h3>
+          <p>
+            Padronize sua equipe com o que há de mais moderno em design
+            procedural e branding.
+          </p>
+          <a href="{{ url_for('generator') }}" class="buy-button">
+            <i class="fas fa-cart-plus"></i> Ver Opções B2B
+          </a>
+        </article>
+
+        <article class="persona-card glass-card reveal-init">
+          <div class="persona-media">
+            <img
+              src="{{ url_for('static', filename='img/tematico.jpg') }}"
+              alt="Coleções Cápsula"
+            />
+            <span class="persona-tag">Exclusivo</span>
+          </div>
+          <h3>Coleções Cápsula</h3>
+          <p>
+            Desenvolva mini-coleções temáticas com designs limitados e alta
+            demanda.
+          </p>
+          <a href="{{ url_for('generator') }}" class="buy-button">
+            <i class="fas fa-cart-plus"></i> Criar Coleção
+          </a>
+        </article>
+
+        <article class="persona-card glass-card reveal-init">
+          <div class="persona-media">
+            <img
+              src="{{ url_for('static', filename='img/simp.jpeg') }}"
+              alt="Designs de Comunidade"
+            />
+            <span class="persona-tag">Colabore</span>
+          </div>
+          <h3>Comunidade</h3>
+          <p>
+            Participe ou crie designs para a comunidade MoleTom e deixe sua
+            marca no mundo.
+          </p>
+          <a href="{{ url_for('generator') }}" class="buy-button">
+            <i class="fas fa-cart-plus"></i> Explorar Designs
+          </a>
+        </article>
+      </div>
+
+      <section
+        class="about-us-section header-dashboard reveal-init"
+        style="margin-top: 60px"
+      >
+        <h2>Nossa Missão: Sua Expressão</h2>
+        <p>
+          Na MoleTom, acreditamos que a moda é uma extensão da sua identidade.
+          Fundimos a vanguarda da inteligência artificial com a paixão pelo
+          design para que você possa vestir o que realmente te representa. Somos
+          mais que uma loja, somos uma plataforma para a sua criatividade.
+        </p>
+        <a
+          href="#"
+          class="btn-secondary glass-card"
+          style="margin-top: 30px; display: inline-block"
+          >Conheça Nossa História <i class="fas fa-arrow-right"></i
+        ></a>
+      </section>
+
+      <section
+        class="cta-section glass-card reveal-init"
+        style="padding: 80px 20px; text-align: center; margin: 80px 0"
+      >
+        <div class="footer-icon">
+          <i
+            class="fas fa-bolt"
+            style="
+              font-size: 3rem;
+              color: var(--primary-color);
+              margin-bottom: 20px;
+            "
+          ></i>
+        </div>
+        <div class="footer-content">
+          <h3 style="font-size: 2.5rem; margin-bottom: 20px">
+            Pare de usar o comum.
+          </h3>
+          <p
+            style="
+              font-size: 1.2rem;
+              max-width: 700px;
+              margin: 0 auto 40px;
+              color: rgba(255, 255, 255, 0.8);
+            "
           >
-          <a class="chip" href="{{ url_for('generator') }}?color=branco"
-            >Branco</a
+            A próxima grande tendência da moda não está nas passarelas, está na
+            sua imaginação. Crie seu moletom único agora.
+          </p>
+          <a
+            href="{{ url_for('generator') }}"
+            class="btn-cta btn-large glow-effect"
+            style="padding: 20px 50px; font-size: 1.2rem; display: inline-block"
           >
-          <a class="chip" href="{{ url_for('generator') }}?color=vinho"
-            >Vinho</a
-          >
+            Gerar Meu Design Exclusivo
+          </a>
         </div>
       </section>
     </main>
+
+    <footer class="real-footer">
+      <div class="container footer-grid">
+        <div class="footer-brand">
+          <img
+            id="imgFooter"
+            class="logo-circle-img footer-logo-img"
+            src="{{ url_for('static', filename='img/icone.png') }}"
+            alt="MoleTom"
+          />
+          <p>
+            A primeira marca de streetwear procedural do Brasil. Seu estilo,
+            gerado em segundos.
+          </p>
+          <div class="social-icons">
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-tiktok"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+          </div>
+        </div>
+
+        <div class="footer-links">
+          <h3>Loja</h3>
+          <ul>
+            <li><a href="#">Gerar Estampa IA</a></li>
+            <li><a href="#">Galeria da Comunidade</a></li>
+            <li><a href="#">Guia de Tamanhos</a></li>
+            <li><a href="#">Rastrear Pedido</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-links">
+          <h3>Suporte</h3>
+          <ul>
+            <li><a href="#">FAQ & Dúvidas</a></li>
+            <li><a href="#">Trocas e Devoluções</a></li>
+            <li><a href="#">Política de Privacidade</a></li>
+            <li><a href="#">Fale Conosco</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-newsletter">
+          <h3>Receba Drops Exclusivos</h3>
+          <p>Assine para ganhar prompts secretos e descontos.</p>
+          <form class="newsletter-form">
+            <input type="email" placeholder="Seu melhor e-mail" required />
+            <button type="submit"><i class="fas fa-paper-plane"></i></button>
+          </form>
+          <div class="payment-methods">
+            <i class="fab fa-cc-visa"></i>
+            <i class="fab fa-cc-mastercard"></i>
+            <i class="fab fa-cc-amex"></i>
+            <i class="fas fa-qrcode"></i>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>
+          &copy; 2026
+          <span class="brand-mark">
+            <span class="brand-mole">MOLE</span
+            ><span class="brand-tom">TOM</span>
+          </span>
+          . CNPJ: 00.000.000/0001-00. Todos os direitos reservados.
+        </p>
+      </div>
+    </footer>
   </body>
 </html>

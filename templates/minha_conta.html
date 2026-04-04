@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MOLE TOM | Minha Conta</title>
+    <link rel="icon" href="{{ url_for('static', filename='img/logo2.png') }}" />
+    <link
+      rel="apple-touch-icon"
+      href="{{ url_for('static', filename='img/logo2.png') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/home.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/account.css') }}"
+    />
+    <script
+      src="{{ url_for('static', filename='js/index.js') }}"
+      defer
+    ></script>
+    <script
+      src="{{ url_for('static', filename='js/minha_conta.js') }}"
+      defer
+    ></script>
+  </head>
+  <body class="page-shell">
+    <div class="announcement-bar">
+      <p>
+        <strong>Seu painel pessoal:</strong> acompanhe suas criações, pedidos e
+        dados da conta em um só lugar.
+      </p>
+    </div>
+
+    <header class="header-wrapper sticky-header">
+      <div class="header-brand">
+        <div class="logo-circle">
+          <img
+            class="logo-circle-img"
+            src="{{ url_for('static', filename='img/logo2.png') }}"
+            alt="MoleTom"
+          />
+        </div>
+        <div class="header-content">
+          <a
+            href="{{ url_for('home') }}"
+            class="brand-logo brand-title brand-mark"
+            ><span class="brand-mole">MOLE</span
+            ><span class="brand-tom">TOM</span></a
+          >
+          <p class="brand-subtitle desktop-only">Streetwear por IA</p>
+        </div>
+      </div>
+
+      <nav class="nav-menu">
+        <div class="mobile-menu-header">
+          <a
+            href="{{ url_for('home') }}"
+            class="brand-logo brand-title brand-mark"
+            ><span class="brand-mole">MOLE</span
+            ><span class="brand-tom">TOM</span></a
+          >
+        </div>
+
+        <ul class="is-layout-flex">
+          <li>
+            <a href="{{ url_for('home') }}" class="nav-link">
+              <i class="fas fa-home"></i> Home
+            </a>
+          </li>
+          <li>
+            <a
+              href="{{ url_for('generator') }}"
+              class="nav-link highlight-link"
+            >
+              <i class="fas fa-wand-magic-sparkles"></i> Gerar Estampa
+            </a>
+          </li>
+          <li>
+            <a href="{{ url_for('minha_conta') }}" class="nav-link active">
+              <i class="fas fa-box"></i> Meus Pedidos
+            </a>
+          </li>
+        </ul>
+
+        <div class="mobile-menu-footer">
+          <a href="{{ url_for('minha_conta') }}" class="profile-pill">
+            <div class="profile-avatar-small">
+              <span>{{ session.get('username', 'M')[:1] | upper }}</span>
+            </div>
+            <span>Meu Perfil</span>
+          </a>
+        </div>
+      </nav>
+
+      <div class="header-actions">
+        <a
+          href="{{ url_for('generator') }}"
+          class="btn-primary header-cta desktop-only glow-effect"
+        >
+          Nova Arte
+        </a>
+        <button class="menu-toggle" aria-label="Abrir menu">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </header>
+
+    <main class="dashboard-shell">
+      <section class="account-panel">
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 20px;
+          "
+        >
+          <div>
+            <p class="eyebrow">
+              <i class="fas fa-fingerprint"></i> Estúdio Pessoal
+            </p>
+            <h1>Seu Acervo</h1>
+            <p class="hero-copy">
+              Aqui você acompanha seus dados de acesso e a galeria das suas
+              estampas geradas pela Inteligência Artificial.
+            </p>
+          </div>
+          <div class="logo-circle account-logo-circle">
+            <img
+              class="logo-circle-img"
+              src="{{ url_for('static', filename='img/logo2.png') }}"
+              alt="MoleTom"
+            />
+          </div>
+        </div>
+
+        <div id="account-error" class="form-error" hidden></div>
+
+        <section class="account-grid">
+          <article class="account-card">
+            <p class="eyebrow"><i class="fas fa-user-astronaut"></i> Usuário</p>
+            <h2 id="account-username">Carregando...</h2>
+            <p id="account-email">-</p>
+            <p style="margin-top: 10px; font-size: 0.8rem; opacity: 0.5">
+              ID: <span id="account-id">-</span>
+            </p>
+          </article>
+
+          <article class="account-card">
+            <p class="eyebrow"><i class="fas fa-layer-group"></i> Resumo</p>
+            <h2 id="account-total-designs">0</h2>
+            <p>Artes totais criadas por você</p>
+          </article>
+
+          <article class="account-card">
+            <p class="eyebrow"><i class="fas fa-bolt"></i> Atividade</p>
+            <h2 id="account-recent-count">0</h2>
+            <p>Gerações recentes no sistema</p>
+          </article>
+        </section>
+
+        <section class="account-card" style="padding: 30px">
+          <p class="eyebrow" style="margin-bottom: 20px">
+            <i class="fas fa-images"></i> Últimas Criações
+          </p>
+          <div id="recent-designs" class="account-list">
+            <p style="color: rgba(255, 255, 255, 0.5)">
+              <i class="fas fa-spinner fa-spin"></i> Sincronizando com o banco
+              de dados...
+            </p>
+          </div>
+        </section>
+
+        <div class="button-row">
+          <a
+            class="btn btn-primary glow-effect"
+            href="{{ url_for('generator') }}"
+          >
+            <i class="fas fa-wand-magic-sparkles"></i> Nova Estampa
+          </a>
+          <a class="btn btn-secondary" href="{{ url_for('logout') }}">
+            <i class="fas fa-sign-out-alt"></i> Sair da Conta
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="real-footer">
+      <div class="container footer-grid">
+        <div class="footer-brand">
+          <img
+            id="imgFooter"
+            class="logo-circle-img footer-logo-img"
+            src="{{ url_for('static', filename='img/icone.png') }}"
+            alt="MoleTom"
+          />
+          <p>
+            A primeira marca de streetwear procedural do Brasil. Seu estilo,
+            gerado em segundos.
+          </p>
+          <div class="social-icons">
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-tiktok"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+          </div>
+        </div>
+
+        <div class="footer-links">
+          <h3>Loja</h3>
+          <ul>
+            <li><a href="#">Gerar Estampa IA</a></li>
+            <li><a href="#">Galeria da Comunidade</a></li>
+            <li><a href="#">Guia de Tamanhos</a></li>
+            <li><a href="#">Rastrear Pedido</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-links">
+          <h3>Suporte</h3>
+          <ul>
+            <li><a href="#">FAQ & Dúvidas</a></li>
+            <li><a href="#">Trocas e Devoluções</a></li>
+            <li><a href="#">Política de Privacidade</a></li>
+            <li><a href="#">Fale Conosco</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-newsletter">
+          <h3>Receba Drops Exclusivos</h3>
+          <p>Assine para ganhar prompts secretos e descontos.</p>
+          <form class="newsletter-form">
+            <input type="email" placeholder="Seu melhor e-mail" required />
+            <button type="submit"><i class="fas fa-paper-plane"></i></button>
+          </form>
+          <div class="payment-methods">
+            <i class="fab fa-cc-visa"></i>
+            <i class="fab fa-cc-mastercard"></i>
+            <i class="fab fa-cc-amex"></i>
+            <i class="fas fa-qrcode"></i>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>
+          &copy; 2026
+          <span class="brand-mark">
+            <span class="brand-mole">MOLE</span
+            ><span class="brand-tom">TOM</span>
+          </span>
+          . CNPJ: 00.000.000/0001-00. Todos os direitos reservados.
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>

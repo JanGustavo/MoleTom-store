@@ -3,46 +3,125 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Preview | MoleTom</title>
+    <title>MOLE TOM | Preview do Moletom</title>
+    <link rel="icon" href="{{ url_for('static', filename='img/logo2.png') }}" />
+    <link
+      rel="apple-touch-icon"
+      href="{{ url_for('static', filename='img/logo2.png') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
     <link
       rel="stylesheet"
       href="{{ url_for('static', filename='css/style.css') }}"
     />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/preview.css') }}"
+    />
   </head>
   <body>
-    <main class="page-shell">
-      <section class="panel preview-grid">
-        <div>
-          <p class="eyebrow">Passo 2</p>
-          <h1>Pré-visualização do moletom</h1>
-          <p class="hero-copy">
-            Modelo: {{ design.color|capitalize }}. Estampa gerada a partir do
-            prompt: {{ design.prompt }}.
-          </p>
-          <div class="button-row">
-            <a
-              class="btn btn-primary"
-              href="{{ url_for('checkout', design_id=design.id) }}"
-              >Comprar</a
-            >
-            <a class="btn btn-secondary" href="{{ url_for('generator') }}"
-              >Gerar outro</a
-            >
+    <main class="page-shell preview-shell">
+      <div class="preview-container reveal-init">
+        <header class="preview-header">
+          <div class="header-brand">
+            <div class="logo-circle">
+              <img
+                class="logo-circle-img"
+                src="{{ url_for('static', filename='img/logo2.png') }}"
+                alt="MoleTom"
+              />
+            </div>
+            <div class="header-content">
+              <a
+                href="{{ url_for('home') }}"
+                class="brand-logo brand-title brand-mark"
+                ><span class="brand-mole">MOLE</span
+                ><span class="brand-tom">TOM</span></a
+              >
+              <p class="brand-subtitle">Streetwear personalizado sob demanda</p>
+            </div>
           </div>
-        </div>
+          <div class="stepper">
+            <span>1. Criação</span>
+            <i class="fas fa-chevron-right" style="font-size: 0.7rem"></i>
+            <span class="active">2. Preview da Arte</span>
+            <i class="fas fa-chevron-right" style="font-size: 0.7rem"></i>
+            <span>3. Checkout</span>
+          </div>
+        </header>
 
-        <div class="hoodie-preview">
-          <img
-            src="{{ url_for('static', filename='img/moletom_' ~ design.color ~ '.webp') }}"
-            alt="Moletom {{ design.color }}"
-          />
-          <img
-            src="{{ design.image_url }}"
-            class="print"
-            alt="Estampa gerada"
-          />
-        </div>
-      </section>
+        <section class="preview-grid">
+          <div class="hoodie-showcase">
+            {% if design.image_url.startswith('/static/generated/') or
+            design.image_url.startswith('data:image') %}
+            <img src="{{ design.image_url }}" alt="Mockup final gerado" />
+            {% else %}
+            <img
+              src="{{ url_for('static', filename='img/moletom_' ~ design.color ~ '.webp') }}"
+              alt="Moletom {{ design.color }}"
+            />
+            <img
+              src="{{ design.image_url }}"
+              class="print"
+              alt="Estampa gerada"
+            />
+            {% endif %}
+          </div>
+
+          <div class="preview-info">
+            <p class="eyebrow">
+              <i class="fas fa-eye"></i> Galeria de Aprovação
+            </p>
+            <h1>Sua Obra de Arte</h1>
+
+            <div class="spec-tags">
+              <span
+                ><i class="fas fa-tshirt"></i> {{ design.color|capitalize }}
+                Premium</span
+              >
+              <span
+                ><i class="fas fa-fingerprint"></i> ID: #{{ design.id }}</span
+              >
+            </div>
+
+            <p
+              style="
+                color: rgba(255, 255, 255, 0.6);
+                font-size: 0.95rem;
+                margin-bottom: 5px;
+              "
+            >
+              Prompt processado pela IA:
+            </p>
+            <div class="prompt-box">"{{ design.prompt }}"</div>
+
+            <div class="action-buttons">
+              <a
+                class="btn-primary glow-effect"
+                href="{{ url_for('checkout', design_id=design.id) }}"
+              >
+                <i class="fas fa-check-circle"></i> Aprovar e Ir para Checkout
+              </a>
+
+              <div class="secondary-actions">
+                <a
+                  class="btn-secondary"
+                  href="{{ design.image_url }}"
+                  download="moletom-moletom-{{ design.id }}.png"
+                >
+                  <i class="fas fa-download"></i> Baixar Arte
+                </a>
+                <a class="btn-secondary" href="{{ url_for('generator') }}">
+                  <i class="fas fa-redo"></i> Gerar Outro
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
     </main>
   </body>
 </html>

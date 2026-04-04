@@ -1,0 +1,36 @@
+# Ambiente virtual
+venv/
+.venv/
+
+# Python cache/artefatos
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Ferramentas/testes
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# Configuracoes locais e segredos
+.env
+.env.*
+*.env
+
+# Banco de dados local (Flask)
+instance/
+*.db
+*.sqlite
+*.sqlite3
+
+# Arquivos de sistema/editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Arquivos gerados pela aplicacao
+static/generated/

@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MOLE TOM | Login</title>
+    <link rel="icon" href="{{ url_for('static', filename='img/logo2.png') }}" />
+    <link
+      rel="apple-touch-icon"
+      href="{{ url_for('static', filename='img/logo2.png') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/auth.css') }}"
+    />
+  </head>
+  <body>
+    <main class="page-shell login-shell">
+      <section class="auth-card reveal-init">
+        <div class="logo-circle auth-logo-circle">
+          <img
+            class="logo-circle-img"
+            src="{{ url_for('static', filename='img/logo2.png') }}"
+            alt="MoleTom"
+          />
+        </div>
+
+        <div>
+          <p class="eyebrow">Bem-vindo de volta</p>
+          <h1>Acesse sua conta</h1>
+          <p class="hero-copy">
+            Pronto para manifestar sua próxima obra de arte? Faça login para
+            acessar o gerador de I.A. e visualizar seus pedidos.
+          </p>
+        </div>
+
+        {% if error_message %}
+        <p class="form-error">
+          <i class="fas fa-exclamation-triangle"></i> {{ error_message }}
+        </p>
+        {% endif %}
+
+        <form method="POST" class="generator-form auth-form">
+          <input type="hidden" name="next" value="{{ next_url }}" />
+
+          <label>
+            E-mail
+            <input
+              type="email"
+              name="email"
+              placeholder="voce@email.com"
+              value="{{ email_value or '' }}"
+              required
+            />
+          </label>
+
+          <label>
+            Senha
+            <input
+              type="password"
+              name="password"
+              placeholder="••••••••"
+              required
+            />
+          </label>
+
+          <button class="btn btn-primary" type="submit">
+            Entrar no Estúdio
+          </button>
+        </form>
+
+        <div class="button-row">
+          <a class="btn btn-secondary" href="{{ url_for('cadastro') }}"
+            >Não tem uma conta? <strong>Crie agora</strong></a
+          >
+          <a
+            class="btn btn-secondary btn-link-back"
+            href="{{ url_for('home') }}"
+            >Voltar para a Loja</a
+          >
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

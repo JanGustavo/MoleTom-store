@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MOLE TOM | Cadastro</title>
+    <link rel="icon" href="{{ url_for('static', filename='img/logo2.png') }}" />
+    <link
+      rel="apple-touch-icon"
+      href="{{ url_for('static', filename='img/logo2.png') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/auth.css') }}"
+    />
+  </head>
+  <body>
+    <main class="page-shell login-shell">
+      <section class="auth-card reveal-init">
+        <i class="fas fa-fingerprint auth-logo"></i>
+
+        <div>
+          <p class="eyebrow">Sua Jornada Começa Aqui</p>
+          <h1>Crie seu Perfil</h1>
+          <p class="hero-copy">
+            Informe seus dados para salvar suas artes geradas, acessar seu
+            histórico de pedidos e liberar seu 1º moletom gratuito.
+          </p>
+        </div>
+
+        {% if error_message %}
+        <p class="form-error">
+          <i class="fas fa-exclamation-triangle"></i> {{ error_message }}
+        </p>
+        {% endif %}
+
+        <form method="POST" class="generator-form auth-form">
+          <label>
+            Nome completo
+            <input
+              type="text"
+              name="full_name"
+              placeholder="Ex: João Silva"
+              value="{{ form_values.full_name or '' }}"
+              required
+            />
+          </label>
+
+          <label>
+            Nome de usuário
+            <input
+              type="text"
+              name="username"
+              placeholder="Ex: joao.silva"
+              value="{{ form_values.username or '' }}"
+              required
+            />
+          </label>
+
+          <label>
+            Número de telefone
+            <input
+              type="tel"
+              name="phone"
+              placeholder="Ex: (11) 99999-9999"
+              value="{{ form_values.phone or '' }}"
+              required
+            />
+          </label>
+
+          <label>
+            E-mail
+            <input
+              type="email"
+              name="email"
+              placeholder="voce@email.com"
+              value="{{ form_values.email or '' }}"
+              required
+            />
+          </label>
+
+          <label>
+            Crie uma senha
+            <input
+              type="password"
+              name="password"
+              placeholder="Mínimo de 8 caracteres"
+              required
+            />
+          </label>
+
+          <label>
+            Confirme a senha
+            <input
+              type="password"
+              name="confirm_password"
+              placeholder="Repita sua senha"
+              required
+            />
+          </label>
+
+          <button class="btn btn-primary" type="submit">
+            Finalizar Cadastro
+          </button>
+        </form>
+
+        <div class="button-row">
+          <a class="btn btn-secondary" href="{{ url_for('login') }}"
+            >Já tenho uma conta</a
+          >
+          <a
+            class="btn btn-secondary btn-link-back"
+            href="{{ url_for('home') }}"
+            >Voltar para a Home</a
+          >
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

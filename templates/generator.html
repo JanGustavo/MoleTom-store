@@ -3,112 +3,222 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Gerador | MoleTom</title>
+    <title>MOLE TOM | Gerador</title>
+    <link rel="icon" href="{{ url_for('static', filename='img/logo2.png') }}" />
+    <link
+      rel="apple-touch-icon"
+      href="{{ url_for('static', filename='img/logo2.png') }}"
+    />
     <link
       rel="stylesheet"
       href="{{ url_for('static', filename='css/style.css') }}"
     />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/generator.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/home.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
   </head>
   <body>
-    <main class="page-shell">
-      <section class="panel">
-        <p class="eyebrow">Passo 1</p>
-        <h1>Gere a imagem do moletom</h1>
-
-        <form method="POST" class="generator-form">
-          <label>
-            Prompt
-            <input name="prompt" placeholder="Ex: dragão cyberpunk" required />
-          </label>
-
-          <div class="color-group" id="cores">
-            <span>Cor do moletom</span>
-            <label
-              ><input
-                type="radio"
-                name="color"
-                value="preto"
-                {%
-                if
-                selected_color=""
-                ="preto"
-                %}checked{%
-                endif
-                %}
-              />
-              Preto</label
+    <div class="page-shell">
+      <header class="header-wrapper sticky-header">
+        <div class="header-brand">
+          <div class="logo-circle">
+            <img
+              class="logo-circle-img"
+              src="{{ url_for('static', filename='img/logo2.png') }}"
+              alt="MoleTom"
+            />
+          </div>
+          <div class="header-content">
+            <a href="{{ url_for('home') }}" class="brand-logo brand-title brand-mark"
+              ><span class="brand-mole">MOLE</span><span class="brand-tom">TOM</span></a
             >
-            <label
-              ><input
-                type="radio"
-                name="color"
-                value="branco"
-                {%
-                if
-                selected_color=""
-                ="branco"
-                %}checked{%
-                endif
-                %}
-              />
-              Branco</label
-            >
-            <label
-              ><input
-                type="radio"
-                name="color"
-                value="vinho"
-                {%
-                if
-                selected_color=""
-                ="vinho"
-                %}checked{%
-                endif
-                %}
-              />
-              Vinho</label
+            <p class="brand-subtitle">Streetwear personalizado sob demanda</p>
+          </div>
+        </div>
+
+        <nav class="nav-menu">
+          <div class="mobile-menu-header">
+            <a href="{{ url_for('home') }}" class="brand-logo brand-title brand-mark"
+              ><span class="brand-mole">MOLE</span><span class="brand-tom">TOM</span></a
             >
           </div>
 
-          <button class="btn btn-primary" type="submit">Gerar imagem</button>
-        </form>
+          <ul class="is-layout-flex">
+            <li><a href="{{ url_for('home') }}" class="nav-link">Home</a></li>
+            <li>
+              <a href="{{ url_for('generator') }}" class="nav-link active"
+                >Gerar Estampa</a
+              >
+            </li>
+            <li>
+              <a href="{{ url_for('minha_conta') }}" class="nav-link"
+                >Minha Conta</a
+              >
+            </li>
+          </ul>
 
-        <div class="quick-actions">
-          <button
-            class="chip"
-            type="button"
-            onclick="
-              document.querySelector(
-                'input[name=\'color\'][value=\'preto\']',
-              ).checked = true
-            "
+          <div class="mobile-menu-footer">
+            <a href="{{ url_for('minha_conta') }}" class="profile-pill">
+              <div class="profile-avatar-small">
+                <span>{{ session.get('username', 'M')[:1] | upper }}</span>
+              </div>
+              <span>Meu Perfil</span>
+            </a>
+          </div>
+        </nav>
+
+        <div class="header-actions">
+          <a
+            href="{{ url_for('minha_conta') }}"
+            class="profile-link desktop-only"
+            aria-label="Ir para minha conta"
           >
-            Selecionar preto
-          </button>
-          <button
-            class="chip"
-            type="button"
-            onclick="
-              document.querySelector(
-                'input[name=\'color\'][value=\'branco\']',
-              ).checked = true
-            "
+            <img
+              class="profile-avatar"
+              src="{{ url_for('api_avatar', name=session.get('username', 'MoleTom')) }}"
+              alt="Avatar do perfil"
+            />
+            <span>{{ session.get('username', 'Meu perfil') }}</span>
+          </a>
+          <a
+            href="{{ url_for('home') }}"
+            class="btn btn-secondary header-cta desktop-only glow-effect"
+            id="voltar-para-loja"
           >
-            Selecionar branco
-          </button>
-          <button
-            class="chip"
-            type="button"
-            onclick="
-              document.querySelector(
-                'input[name=\'color\'][value=\'vinho\']',
-              ).checked = true
-            "
-          >
-            Selecionar vinho
+            Voltar para loja
+          </a>
+          <button class="menu-toggle" aria-label="Abrir menu">
+            <i class="fas fa-bars"></i>
           </button>
         </div>
-      </section>
-    </main>
+      </header>
+
+      <main class="container">
+        <section class="panel">
+          <p class="eyebrow">Passo 2</p>
+          <h1>Gerador de estampa</h1>
+          <p class="hero-copy">
+            Escreva sua ideia e escolha a cor do moletom para criar a arte.
+          </p>
+
+          {% if error_message %}
+          <p class="form-error">{{ error_message }}</p>
+          {% endif %}
+
+          <form method="POST" class="generator-form">
+            <label>
+              Prompt
+              <input
+                id="prompt-input"
+                name="prompt"
+                placeholder="Ex: dragão cyberpunk"
+                value="{{ prompt_value or '' }}"
+                required
+              />
+            </label>
+
+            <p class="field-hint">Exemplos prontos:</p>
+            <div class="prompt-examples">
+              <button
+                class="chip"
+                type="button"
+                onclick="document.getElementById('prompt-input').value='dragon cyberpunk neon com tipografia agressiva'"
+              >
+                Dragon cyberpunk
+              </button>
+              <button
+                class="chip"
+                type="button"
+                onclick="document.getElementById('prompt-input').value='kit casal minimalista com simbolos complementares'"
+              >
+                Kit casal
+              </button>
+              <button
+                class="chip"
+                type="button"
+                onclick="document.getElementById('prompt-input').value='moletom para turma de formandos 2026 estilo streetwear'"
+              >
+                Turma de formandos
+              </button>
+              <button
+                class="chip"
+                type="button"
+                onclick="document.getElementById('prompt-input').value='logo de equipe esport com escudo e glitch'"
+              >
+                Equipe esport
+              </button>
+            </div>
+
+            <div class="color-group" id="cores">
+              <span>Cor do moletom</span>
+              <label
+                ><input
+                  type="radio"
+                  name="color"
+                  value="preto"
+                  {% if (selected_color or '') == 'preto' %}checked{% endif %}
+                />
+                Preto</label
+              >
+              <label
+                ><input
+                  type="radio"
+                  name="color"
+                  value="branco"
+                  {% if (selected_color or '') == 'branco' %}checked{% endif %}
+                />
+                Branco</label
+              >
+              <label
+                ><input
+                  type="radio"
+                  name="color"
+                  value="vinho"
+                  {% if (selected_color or '') == 'vinho' %}checked{% endif %}
+                />
+                Vinho</label
+              >
+            </div>
+
+            <button class="btn btn-primary" type="submit">Gerar imagem</button>
+          </form>
+
+          <div class="quick-actions">
+            {% if session.get('user_id') %}
+            <a class="chip" href="{{ url_for('logout') }}">Sair</a>
+            {% else %}
+            <a class="chip" href="{{ url_for('login', next='/generator') }}"
+              >Entrar</a
+            >
+            {% endif %}
+            <a class="chip" href="{{ url_for('home') }}">Voltar para loja</a>
+          </div>
+        </section>
+      </main>
+
+      <footer
+        class="footer-info"
+        style="margin-top: 13px; border-top: 1px solid rgba(255, 255, 255, 0.1)"
+      >
+        <div class="footer-content">
+          <p>
+            <strong class="brand-mark">
+              <span class="brand-mole">MOLE</span><span class="brand-tom">TOM</span>
+            </strong>
+            &copy; 2026 - Estética Techwear & Design
+            Procedural
+          </p>
+        </div>
+      </footer>
+    </div>
   </body>
 </html>

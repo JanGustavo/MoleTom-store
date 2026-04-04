@@ -3,32 +3,305 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Checkout | MoleTom</title>
+    <title>MOLE TOM | Checkout Seguro</title>
+    <link rel="icon" href="{{ url_for('static', filename='img/logo2.png') }}" />
+    <link
+      rel="apple-touch-icon"
+      href="{{ url_for('static', filename='img/logo2.png') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
     <link
       rel="stylesheet"
       href="{{ url_for('static', filename='css/style.css') }}"
     />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/checkout.css') }}"
+    />
+    <script
+      src="{{ url_for('static', filename='js/checkout.js') }}"
+      defer
+    ></script>
   </head>
   <body>
-    <main class="page-shell">
-      <section class="panel">
-        <p class="eyebrow">Passo 3</p>
-        <h1>Checkout do design</h1>
-        <p class="hero-copy">
-          Seu moletom {{ design.color }} foi preparado com sucesso. O próximo
-          passo é integrar pagamento.
-        </p>
-        <div class="button-row">
-          <a
-            class="btn btn-primary"
-            href="{{ url_for('preview', design_id=design.id) }}"
-            >Voltar ao preview</a
-          >
-          <a class="btn btn-secondary" href="{{ url_for('generator') }}"
-            >Gerar novo design</a
-          >
+    <main class="page-shell checkout-shell">
+      <div class="checkout-container reveal-init">
+        <header class="checkout-header">
+          <div class="header-brand">
+            <div class="logo-circle">
+              <img
+                class="logo-circle-img"
+                src="{{ url_for('static', filename='img/logo2.png') }}"
+                alt="MoleTom"
+              />
+            </div>
+            <div class="header-content">
+              <a
+                href="{{ url_for('home') }}"
+                class="brand-logo brand-title brand-mark"
+                ><span class="brand-mole">MOLE</span
+                ><span class="brand-tom">TOM</span></a
+              >
+              <p class="brand-subtitle">Streetwear personalizado sob demanda</p>
+            </div>
+          </div>
+          <div class="stepper">
+            <span>1. Criação</span>
+            <i class="fas fa-chevron-right" style="font-size: 0.7rem"></i>
+            <span>2. Preview</span>
+            <i class="fas fa-chevron-right" style="font-size: 0.7rem"></i>
+            <span class="active">3. Checkout Seguro</span>
+          </div>
+        </header>
+
+        <div class="checkout-grid">
+          <div class="checkout-left">
+            <form method="POST" class="checkout-form">
+              {% if order_success %}
+              <div class="checkout-success">
+                <i class="fas fa-circle-check"></i>
+                Pedido recebido. O endereço foi validado e o checkout foi
+                concluído com sucesso.
+              </div>
+              {% endif %} {% if error_message %}
+              <div class="checkout-error">
+                <i class="fas fa-triangle-exclamation"></i>
+                {{ error_message }}
+              </div>
+              {% endif %}
+
+              <input type="hidden" name="payment_method" value="pix" />
+
+              <section class="checkout-card">
+                <h3><i class="fas fa-user"></i> Dados do Cliente</h3>
+                <div class="buyer-chip">
+                  <i class="fas fa-id-card"></i>
+                  <span
+                    >Nome vindo do cadastro:
+                    <strong
+                      >{{ user.full_name or user.username or
+                      session.get('username', 'Usuário') }}</strong
+                    ></span
+                  >
+                </div>
+
+                <div class="checkout-form-grid">
+                  <label class="checkout-field checkout-field-wide">
+                    Nome completo
+                    <input
+                      type="text"
+                      name="full_name"
+                      value="{{ checkout_data.get('full_name', user.full_name or user.username or session.get('username', '')) }}"
+                      placeholder="Seu nome completo"
+                      required
+                    />
+                  </label>
+
+                  <label class="checkout-field">
+                    E-mail
+                    <input
+                      type="email"
+                      name="email"
+                      value="{{ checkout_data.get('email', user.email or session.get('user_email', '')) }}"
+                      placeholder="voce@email.com"
+                      required
+                    />
+                  </label>
+
+                  <label class="checkout-field">
+                    Telefone
+                    <input
+                      type="tel"
+                      name="phone"
+                      value="{{ checkout_data.get('phone', user.phone or '') }}"
+                      placeholder="(11) 99999-9999"
+                    />
+                  </label>
+                </div>
+              </section>
+
+              <section class="checkout-card">
+                <h3><i class="fas fa-box-open"></i> Endereço de Entrega</h3>
+                <p class="checkout-note">
+                  Digite o CEP para preencher automaticamente rua, bairro,
+                  cidade e estado com a ViaCEP.
+                </p>
+
+                <div class="checkout-status" id="cep-status">
+                  Aguardando CEP para autopreenchimento.
+                </div>
+
+                <div class="checkout-form-grid">
+                  <label class="checkout-field checkout-field-small">
+                    CEP
+                    <input
+                      id="cep"
+                      type="text"
+                      name="cep"
+                      value="{{ checkout_data.get('cep', '') }}"
+                      placeholder="00000-000"
+                      inputmode="numeric"
+                      maxlength="9"
+                      required
+                    />
+                  </label>
+
+                  <label class="checkout-field checkout-field-wide">
+                    Logradouro
+                    <input
+                      id="street"
+                      type="text"
+                      name="street"
+                      value="{{ checkout_data.get('street', '') }}"
+                      placeholder="Rua, avenida, travessa..."
+                      required
+                    />
+                  </label>
+
+                  <label class="checkout-field checkout-field-small">
+                    Número
+                    <input
+                      type="text"
+                      name="number"
+                      value="{{ checkout_data.get('number', '') }}"
+                      placeholder="123"
+                      required
+                    />
+                  </label>
+
+                  <label class="checkout-field checkout-field-wide">
+                    Complemento
+                    <input
+                      type="text"
+                      name="complement"
+                      value="{{ checkout_data.get('complement', '') }}"
+                      placeholder="Apto, bloco, casa..."
+                    />
+                  </label>
+
+                  <label class="checkout-field">
+                    Bairro
+                    <input
+                      id="district"
+                      type="text"
+                      name="district"
+                      value="{{ checkout_data.get('district', '') }}"
+                      placeholder="Bairro"
+                      required
+                    />
+                  </label>
+
+                  <label class="checkout-field">
+                    Cidade
+                    <input
+                      id="city"
+                      type="text"
+                      name="city"
+                      value="{{ checkout_data.get('city', '') }}"
+                      placeholder="Cidade"
+                      required
+                    />
+                  </label>
+
+                  <label class="checkout-field">
+                    Estado
+                    <input
+                      id="state"
+                      type="text"
+                      name="state"
+                      value="{{ checkout_data.get('state', '') }}"
+                      placeholder="UF"
+                      maxlength="2"
+                      required
+                    />
+                  </label>
+
+                  <label class="checkout-field checkout-field-wide">
+                    Ponto de referência
+                    <input
+                      type="text"
+                      name="reference"
+                      value="{{ checkout_data.get('reference', '') }}"
+                      placeholder="Ex.: perto da padaria"
+                    />
+                  </label>
+                </div>
+              </section>
+
+              <section class="checkout-card">
+                <h3><i class="fas fa-shield-alt"></i> Pagamento</h3>
+                <p class="checkout-payment-copy">
+                  Como este é o seu
+                  <strong>1º modelo gerado na plataforma</strong>, o valor do
+                  moletom foi totalmente isento. O checkout segue como
+                  simulação, mas os dados já ficam prontos para uma futura
+                  integração real.
+                </p>
+
+                <div class="payment-icons">
+                  <i class="fab fa-cc-visa"></i>
+                  <i class="fab fa-cc-mastercard"></i>
+                  <i class="fab fa-cc-apple-pay"></i>
+                  <i class="fas fa-qrcode"></i>
+                </div>
+              </section>
+
+              <div class="checkout-actions">
+                <button type="submit" class="btn-primary glow-effect btn-block">
+                  <i class="fas fa-lock"></i> Finalizar Pedido
+                </button>
+
+                <a
+                  href="{{ url_for('preview', design_id=design.id) }}"
+                  class="btn-outline btn-block"
+                >
+                  <i class="fas fa-undo"></i> Voltar ao Preview
+                </a>
+              </div>
+            </form>
+          </div>
+
+          <div class="checkout-right">
+            <section class="checkout-card">
+              <h3><i class="fas fa-shopping-bag"></i> Resumo do Pedido</h3>
+
+              <div class="order-item">
+                <img
+                  src="{{ url_for('static', filename='img/moletom_' ~ design.color|lower ~ '.webp') }}"
+                  alt="Seu Moletom"
+                />
+                <div class="item-details">
+                  <h4>Moletom Custom I.A.</h4>
+                  <p>Cor: {{ design.color|capitalize }}</p>
+                  <p>Arte: #{{ design.id }}</p>
+                </div>
+              </div>
+
+              <div class="price-breakdown">
+                <div class="price-row">
+                  <span>Subtotal</span>
+                  <span>R$ 289,90</span>
+                </div>
+                <div class="price-row">
+                  <span>Frete Expresso</span>
+                  <span>R$ 0,00</span>
+                </div>
+                <div class="price-row discount">
+                  <span>Bônus: 1º Moletom</span>
+                  <span>- R$ 289,90</span>
+                </div>
+                <div class="price-row total">
+                  <span>Total</span>
+                  <span>R$ 0,00</span>
+                </div>
+              </div>
+            </section>
+          </div>
         </div>
-      </section>
+      </div>
     </main>
   </body>
 </html>
