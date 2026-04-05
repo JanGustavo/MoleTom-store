@@ -217,7 +217,8 @@ def _send_password_reset_email(user: User) -> bool:
     try:
         mail.send(message)
         return True
-    except Exception:
+    except Exception as e:
+        print(f"Erro ao enviar email: {e}", flush=True)
         return False
 
 
