@@ -57,9 +57,11 @@ db.init_app(app)
 mail = Mail(app)
 reset_serializer = URLSafeTimedSerializer(app.config["SECRET_KEY"])
 RESET_TOKEN_MAX_AGE_SECONDS = int(os.environ.get("RESET_TOKEN_MAX_AGE_SECONDS", 1800))
+auto_create_schema = os.environ.get("AUTO_CREATE_SCHEMA", "false").lower() in {"1", "true", "yes"}
 
-with app.app_context():
-    db.create_all()
+if is_sqlite_database or auto_create_schema:
+    with app.app_context():
+        db.create_all()
 
 
 # Compatibilidade de schema para bancos locais sem migracao formal.
