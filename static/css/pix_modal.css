@@ -1,0 +1,415 @@
+/* pix_modal.css — Modal de contribuição PIX MoleTom */
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap');
+
+/* ---------- BOTÃO GATILHO ---------- */
+.pix-trigger-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 22px;
+    background: linear-gradient(135deg, #6200EE, #9c42f5);
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 20px rgba(98, 0, 238, 0.35);
+}
+
+.pix-trigger-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(98, 0, 238, 0.5);
+}
+
+.pix-trigger-icon {
+    font-size: 1.1rem;
+    animation: pulse-heart 1.8s ease-in-out infinite;
+}
+
+/* ---------- OVERLAY ---------- */
+.pix-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    font-family: 'Space Grotesk', sans-serif;
+}
+
+.pix-overlay.pix-open {
+    opacity: 1;
+    pointer-events: all;
+}
+
+/* ---------- PARTÍCULAS ---------- */
+.pix-particles {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.pix-particle {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    animation: float-particle linear infinite;
+    opacity: 0.4;
+}
+
+/* ---------- MODAL PRINCIPAL ---------- */
+.pix-modal {
+    position: relative;
+    width: min(440px, 92vw);
+    background: linear-gradient(145deg, #13141a, #1c1d26);
+    border: 1px solid rgba(98, 0, 238, 0.3);
+    border-radius: 24px;
+    padding: 36px 32px 28px;
+    box-shadow: 0 32px 80px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.04);
+    transform: scale(0.88) translateY(20px);
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    text-align: center;
+    color: #fff;
+}
+
+.pix-overlay.pix-open .pix-modal {
+    transform: scale(1) translateY(0);
+}
+
+.pix-close {
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    background: rgba(255, 255, 255, 0.08);
+    border: none;
+    color: rgba(255, 255, 255, 0.6);
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: background 0.2s, color 0.2s;
+}
+
+.pix-close:hover {
+    background: rgba(255, 255, 255, 0.18);
+    color: #fff;
+}
+
+/* ---------- HEADER ---------- */
+.pix-heart-anim {
+    font-size: 2.8rem;
+    animation: pulse-heart 1.8s ease-in-out infinite;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.pix-title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    background: linear-gradient(90deg, #c084fc, #818cf8);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 0 0 8px;
+}
+
+.pix-subtitle {
+    font-size: 0.88rem;
+    color: rgba(255, 255, 255, 0.6);
+    line-height: 1.6;
+    margin: 0 0 24px;
+}
+
+/* ---------- VALORES ---------- */
+.pix-amounts {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 24px;
+}
+
+.pix-amount-loading {
+    width: 100%;
+    padding: 16px 14px;
+    border-radius: 14px;
+    border: 1px dashed rgba(255, 255, 255, 0.16);
+    color: rgba(255, 255, 255, 0.58);
+    font-size: 0.88rem;
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.pix-amount-btn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 14px 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1.5px solid rgba(255, 255, 255, 0.1);
+    border-radius: 14px;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.pix-amount-btn:hover {
+    background: rgba(98, 0, 238, 0.2);
+    border-color: rgba(98, 0, 238, 0.5);
+    transform: translateY(-2px);
+}
+
+.pix-amount-btn.pix-amount-selected {
+    background: rgba(98, 0, 238, 0.25);
+    border-color: #6200EE;
+    box-shadow: 0 0 0 3px rgba(98, 0, 238, 0.18);
+}
+
+.pix-amount-emoji {
+    font-size: 1.4rem;
+}
+
+.pix-amount-label {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.55);
+}
+
+.pix-amount-value {
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+/* ---------- QR CODE ---------- */
+.pix-qr-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 180px;
+    margin-bottom: 16px;
+}
+
+.pix-qr-loader {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.85rem;
+}
+
+.pix-spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid rgba(98, 0, 238, 0.2);
+    border-top-color: #6200EE;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+.pix-qr-img {
+    width: 170px;
+    height: 170px;
+    border-radius: 14px;
+    padding: 10px;
+    background: #fff;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1);
+    animation: qr-appear 0.4s ease;
+}
+
+/* ---------- INSTRUÇÃO & BOTÃO ---------- */
+.pix-instruction {
+    font-size: 0.82rem;
+    color: rgba(255, 255, 255, 0.5);
+    margin: 0 0 20px;
+    line-height: 1.5;
+}
+
+.pix-instruction strong {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.pix-paid-btn {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #6200EE, #9c42f5);
+    border: none;
+    border-radius: 12px;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 16px rgba(98, 0, 238, 0.35);
+}
+
+.pix-paid-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(98, 0, 238, 0.5);
+}
+
+/* ---------- TELA DE AGRADECIMENTO ---------- */
+.pix-thanks {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+.pix-confetti-wrap {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.pix-confetti-piece {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    animation: confetti-fall linear forwards;
+}
+
+.pix-thanks-card {
+    background: linear-gradient(145deg, #13141a, #1c1d26);
+    border: 1px solid rgba(98, 0, 238, 0.4);
+    border-radius: 24px;
+    padding: 40px 32px;
+    text-align: center;
+    color: #fff;
+    max-width: 360px;
+    width: 92vw;
+    animation: thanks-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 32px 80px rgba(0, 0, 0, 0.6);
+}
+
+.pix-thanks-emoji {
+    font-size: 3.5rem;
+    display: block;
+    margin-bottom: 14px;
+    animation: bounce-in 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
+}
+
+.pix-thanks-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    background: linear-gradient(90deg, #c084fc, #818cf8);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 0 0 12px;
+}
+
+.pix-thanks-msg {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.65);
+    line-height: 1.7;
+    margin: 0 0 24px;
+}
+
+.pix-thanks-close {
+    padding: 12px 28px;
+    background: rgba(98, 0, 238, 0.2);
+    border: 1.5px solid rgba(98, 0, 238, 0.5);
+    border-radius: 50px;
+    color: #c084fc;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+}
+
+.pix-thanks-close:hover {
+    background: rgba(98, 0, 238, 0.35);
+    transform: translateY(-2px);
+}
+
+/* ---------- KEYFRAMES ---------- */
+@keyframes pulse-heart {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.15);
+    }
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes qr-appear {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes float-particle {
+    from {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0.4;
+    }
+
+    to {
+        transform: translateY(-10vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+@keyframes confetti-fall {
+    0% {
+        transform: translateY(-10px) rotate(0deg);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+    }
+}
+
+@keyframes thanks-pop {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes bounce-in {
+    from {
+        transform: scale(0);
+    }
+
+    to {
+        transform: scale(1);
+    }
+}

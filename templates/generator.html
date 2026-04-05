@@ -147,22 +147,9 @@
             <button class="btn btn-primary" type="submit">Gerar imagem</button>
           </form>
 
-          <div class="quick-actions">
-            {% if session.get('user_id') %}
-            <a class="chip action-chip" href="{{ url_for('logout') }}"
-              ><i class="fas fa-right-from-bracket"></i> Sair</a
-            >
-            {% else %}
-            <a class="chip action-chip" href="{{ url_for('login', next='/generator') }}"
-              ><i class="fas fa-right-to-bracket"></i> Entrar</a
-            >
-            {% endif %}
-            <a class="chip action-chip" href="{{ url_for('home') }}"
-              ><i class="fas fa-store"></i> Voltar para loja</a
-            >
-            <a class="chip action-chip" href="{{ url_for('comunidade') }}"
-              ><i class="fas fa-users"></i> Galeria da Comunidade</a
-            >
+          <div class="page-reference">
+            <span class="reference-dot"></span>
+            <span class="reference-text">Gerador de estampa - Passo 2</span>
           </div>
         </section>
       </main>

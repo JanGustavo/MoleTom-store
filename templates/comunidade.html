@@ -21,10 +21,15 @@
       rel="stylesheet"
       href="{{ url_for('static', filename='css/community.css') }}"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css"
+    />
     <script
       src="{{ url_for('static', filename='js/header.js') }}"
       defer
     ></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
     <script
       src="{{ url_for('static', filename='js/community.js') }}"
       defer
@@ -74,23 +79,53 @@
             <p class="community-caption">{{ entry.caption }}</p>
             {% endif %}
             <div class="community-actions">
-              <button
-                type="button"
-                class="btn-secondary vote-btn"
-                data-entry-id="{{ entry.id }}"
-              >
-                <i class="fas fa-fire"></i> Votar
-              </button>
-              <span class="vote-count" id="vote-count-{{ entry.id }}"
-                >{{ entry.votes_count }} votos</span
-              >
+              <div class="community-actions-top">
+                <button
+                  type="button"
+                  class="btn-secondary vote-btn"
+                  data-entry-id="{{ entry.id }}"
+                >
+                  <i class="fas fa-fire"></i> Votar
+                </button>
+                <span class="vote-count" id="vote-count-{{ entry.id }}"
+                  >{{ entry.votes_count }} votos</span
+                >
+              </div>
+
+              <div class="community-actions-share">
+                <a
+                  class="btn-secondary share-btn share-btn--wa"
+                  href="https://wa.me/?text={{ ('Olha esse design da comunidade MoleTom: ' ~ url_for('comunidade_design', community_design_id=entry.id, _external=True)) | urlencode }}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <i class="fab fa-whatsapp"></i> WhatsApp
+                </a>
+                <a
+                  class="btn-secondary share-btn share-btn--x"
+                  href="https://twitter.com/intent/tweet?text={{ ('Design da comunidade MoleTom: ' ~ url_for('comunidade_design', community_design_id=entry.id, _external=True)) | urlencode }}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <svg
+                    class="share-icon-x"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                    focusable="false"
+                  >
+                    <path
+                      d="M18.901 1.153h3.68l-8.042 9.19L24 22.847h-7.406l-5.8-7.584-6.639 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932 6.064-6.932zM17.61 20.644h2.039L6.486 3.24H4.298z"
+                    />
+                  </svg>
+                  
+                </a>
+              </div>
+
               <a
-                class="btn-secondary"
-                href="https://wa.me/?text={{ ('Olha esse design da comunidade MoleTom: ' ~ url_for('comunidade_design', community_design_id=entry.id, _external=True)) | urlencode }}"
-                target="_blank"
-                rel="noopener noreferrer"
+                class="btn-primary card-checkout-btn"
+                href="{{ url_for('comunidade_design_checkout', community_design_id=entry.id) }}"
               >
-                <i class="fab fa-whatsapp"></i> Compartilhar
+                <i class="fas fa-cart-shopping"></i> Checkout
               </a>
             </div>
           </div>

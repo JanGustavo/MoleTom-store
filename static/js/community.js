@@ -1,3 +1,20 @@
+function showCommunityNotice(message) {
+    if (window.Swal) {
+        window.Swal.fire({
+            icon: "info",
+            title: "Aviso",
+            text: message,
+            confirmButtonText: "Entendi",
+            customClass: {
+                popup: "community-alert",
+            },
+        });
+        return;
+    }
+
+    window.alert(message);
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     const voteButtons = document.querySelectorAll(".vote-btn");
 
@@ -34,7 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
             } catch (error) {
                 button.disabled = false;
                 button.innerHTML = originalHtml;
-                window.alert(error.message || "Erro ao votar.");
+                showCommunityNotice(error.message || "Erro ao votar.");
             }
         });
     });

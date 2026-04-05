@@ -52,31 +52,25 @@
 
     <main class="dashboard-shell">
       <section class="account-panel">
-        <div
-          style="
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            flex-wrap: wrap;
-            gap: 20px;
-          "
-        >
-          <div>
+        <div class="account-hero">
+          <div class="account-hero-copy">
             <p class="eyebrow">
               <i class="fas fa-fingerprint"></i> Estúdio Pessoal
             </p>
-            <h1>Seu Acervo</h1>
+            <div class="account-hero-title-row">
+              <h1>Seu Acervo</h1>
+              <div class="logo-circle account-logo-circle account-hero-logo">
+                <img
+                  class="logo-circle-img"
+                  src="{{ url_for('static', filename='img/logo2.png') }}"
+                  alt="MoleTom"
+                />
+              </div>
+            </div>
             <p class="hero-copy">
               Aqui você acompanha seus dados de acesso e a galeria das suas
               estampas geradas pela Inteligência Artificial.
             </p>
-          </div>
-          <div class="logo-circle account-logo-circle">
-            <img
-              class="logo-circle-img"
-              src="{{ url_for('static', filename='img/logo2.png') }}"
-              alt="MoleTom"
-            />
           </div>
         </div>
 

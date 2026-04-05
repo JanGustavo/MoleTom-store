@@ -21,6 +21,10 @@
       rel="stylesheet"
       href="{{ url_for('static', filename='css/checkout.css') }}"
     />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/pix_modal.css') }}"
+    />
     <script
       src="{{ url_for('static', filename='js/checkout.js') }}"
       defer
@@ -266,6 +270,10 @@
                   <i class="fab fa-cc-apple-pay"></i>
                   <i class="fas fa-qrcode"></i>
                 </div>
+
+                <div class="checkout-pix-support">
+                  {% include 'pix_modal.html' %}
+                </div>
               </section>
 
               <div class="checkout-actions">
@@ -289,13 +297,22 @@
 
               <div class="order-item">
                 <img
-                  src="{{ url_for('static', filename='img/moletom_' ~ design.color|lower ~ '.webp') }}"
-                  alt="Seu Moletom"
+                  src="{{ design.image_url or url_for('static', filename='img/moletom_' ~ design.color|lower ~ '.webp') }}"
+                  alt="{{ design.prompt }}"
                 />
                 <div class="item-details">
                   <h4>Moletom Custom I.A.</h4>
                   <p>Cor: {{ design.color|capitalize }}</p>
                   <p>Arte: #{{ design.id }}</p>
+                  <p
+                    style="
+                      margin-top: 6px;
+                      font-size: 0.86rem;
+                      color: rgba(255, 255, 255, 0.62);
+                    "
+                  >
+                    {{ design.prompt }}
+                  </p>
                 </div>
               </div>
 
@@ -322,5 +339,10 @@
         </div>
       </div>
     </main>
+
+    <script
+      src="{{ url_for('static', filename='js/pix_modal.js') }}"
+      defer
+    ></script>
   </body>
 </html>

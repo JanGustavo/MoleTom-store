@@ -48,11 +48,34 @@
     margin-bottom: 30px;
 }
 
+.account-hero {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.account-hero-copy {
+    flex: 1;
+    min-width: 0;
+}
+
+.account-hero-title-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
 .account-logo-circle {
     width: 72px;
     height: 72px;
     opacity: 0.85;
     box-shadow: 0 0 20px rgba(98, 0, 238, 0.2);
+}
+
+.account-hero-logo {
+    flex-shrink: 0;
 }
 
 .footer-logo-img {
@@ -207,6 +230,25 @@
 @media (max-width: 768px) {
     .account-panel {
         padding: 25px;
+    }
+
+    .account-hero {
+        flex-direction: column;
+        gap: 14px;
+    }
+
+    .account-hero-title-row {
+        flex-wrap: nowrap;
+        gap: 12px;
+    }
+
+    .account-hero-title-row h1 {
+        margin-bottom: 0;
+    }
+
+    .account-hero-logo {
+        width: 56px;
+        height: 56px;
     }
 
     .account-grid,

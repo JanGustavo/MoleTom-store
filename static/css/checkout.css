@@ -228,6 +228,15 @@
     margin-bottom: 18px;
 }
 
+.checkout-pix-support {
+    margin-top: 18px;
+}
+
+.checkout-pix-support .pix-trigger-btn {
+    width: 100%;
+    justify-content: center;
+}
+
 .checkout-actions {
     display: grid;
     gap: 15px;

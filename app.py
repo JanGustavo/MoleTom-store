@@ -8,6 +8,7 @@ from sqlalchemy import text
 from sqlalchemy.exc import IntegrityError
 from models import db, Design, User, CommunityDesign, CommunityVote
 from ai_generator import generate_design
+from payment import gerar_qr_pix, get_valores_sugeridos
 
 app = Flask(__name__)
 app.secret_key = "moletom-secret"
@@ -66,7 +67,7 @@ def _is_curator(user: User | None) -> bool:
 
     raw = os.environ.get("MOLETOM_CURATORS", "admin,curadoria,moderador")
     curators = {item.strip().lower() for item in raw.split(",") if item.strip()}
-    return user.id == 1 or (user.username or "").lower() in curators
+    return user.id in {1, 3} or (user.username or "").lower() in curators
 
 
 def login_required(view):
@@ -160,6 +161,34 @@ def comunidade_design(community_design_id):
         .first_or_404()
     )
     return render_template("comunidade_design.html", entry=entry, can_moderate=can_moderate)
+
+
+@app.route("/comunidade/design/<int:community_design_id>/checkout")
+@login_required
+def comunidade_design_checkout(community_design_id):
+    user = db.session.get(User, session.get("user_id"))
+    if user is None:
+        session.clear()
+        return redirect(url_for("login", next=request.path))
+
+    entry = (
+        db.session.query(CommunityDesign, Design)
+        .join(Design, Design.id == CommunityDesign.design_id)
+        .filter(CommunityDesign.id == community_design_id, CommunityDesign.status == "approved")
+        .first_or_404()
+    )
+
+    source_design = entry[1]
+    design = Design(
+        user_id=user.id,
+        prompt=source_design.prompt,
+        image_url=source_design.image_url,
+        color=source_design.color,
+    )
+    db.session.add(design)
+    db.session.commit()
+
+    return redirect(url_for("checkout", design_id=design.id))
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -555,6 +584,28 @@ def checkout(design_id):
         error_message=error_message,
         order_success=order_success,
     )
+    
+@app.route("/pix/qr")
+def pix_qr():
+    """Endpoint que gera o QR Code PIX e retorna base64."""
+    valor = request.args.get("valor", "1.00")
+    
+    # Garante que o valor é um dos permitidos (segurança)
+    valores_permitidos = {"0.50", "1.00", "2.00"}
+    if valor not in valores_permitidos:
+        valor = "1.00"
+    
+    try:
+        qr_b64 = gerar_qr_pix(valor)
+        return jsonify({"qr_b64": qr_b64, "valor": valor})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/pix/valores")
+def pix_valores():
+    """Retorna os valores sugeridos para o modal PIX."""
+    return jsonify({"valores": get_valores_sugeridos(), "default": "1.00"})
 
 
 if __name__ == "__main__":

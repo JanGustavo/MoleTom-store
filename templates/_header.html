@@ -2,8 +2,8 @@
 
 <div class="announcement-bar">
   <p>
-    {{ announcement_text | default("🚀 Liberte sua criatividade: Gere seu 1º
-    moletom totalmente de graça por tempo limitado!") }}
+    {{ (announcement_text | default("🚀 Liberte sua criatividade: Gere seu 1º
+    moletom totalmente de graça por tempo limitado!")) | safe }}
   </p>
 </div>
 
@@ -35,7 +35,7 @@
       >
     </div>
 
-    <ul class="is-layout-flex">
+    <ul class="is-layout-flex nav-indicator-container">
       <li>
         <a
           href="{{ url_for('home') }}"
@@ -46,7 +46,7 @@
       <li>
         <a
           href="{{ url_for('generator') }}"
-          class="nav-link highlight-link {% if nav_active == 'generator' %}active{% endif %}"
+          class="nav-link {% if nav_active == 'generator' %}active{% endif %}"
           ><i class="fas fa-wand-magic-sparkles"></i> Gerar Estampa</a
         >
       </li>
@@ -86,14 +86,7 @@
   </nav>
 
   <div class="header-actions">
-    {% if show_curator_button and can_moderate %}
-    <a
-      href="{{ url_for('curadoria_comunidade') }}"
-      class="btn-secondary header-cta desktop-only"
-    >
-      <i class="fas fa-gavel"></i> Curadoria
-    </a>
-    {% endif %} {% if show_cta_button %}
+    {% if show_cta_button %}
     <a
       href="{{ cta_link | default(url_for('generator')) }}"
       class="btn-primary header-cta desktop-only glow-effect"

@@ -3,4 +3,5 @@ Flask-SQLAlchemy
 SQLAlchemy
 python-dotenv
 requests
+qrcode[pil]
 

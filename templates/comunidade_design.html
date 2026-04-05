@@ -11,6 +11,10 @@
     />
     <link
       rel="stylesheet"
+      href="{{ url_for('static', filename='css/home.css') }}"
+    />
+    <link
+      rel="stylesheet"
       href="{{ url_for('static', filename='css/community.css') }}"
     />
     <link
@@ -49,15 +53,38 @@
             <i class="fas fa-fire"></i> {{ community.votes_count }} votos
           </p>
           <div class="community-actions">
+            <a
+              class="btn-primary"
+              href="{{ url_for('comunidade_design_checkout', community_design_id=community.id) }}"
+              ><i class="fas fa-cart-shopping"></i> Ir para Checkout</a
+            >
             <a class="btn-primary" href="{{ url_for('generator') }}"
               ><i class="fas fa-wand-magic-sparkles"></i> Criar Minha Versão</a
             >
             <a
-              class="btn-secondary"
+              class="btn-secondary share-btn share-btn--x"
               target="_blank"
               rel="noopener noreferrer"
               href="https://twitter.com/intent/tweet?text={{ ('Design da comunidade MoleTom: ' ~ url_for('comunidade_design', community_design_id=community.id, _external=True)) | urlencode }}"
-              ><i class="fab fa-x-twitter"></i> Compartilhar</a
+            >
+              <svg
+                class="share-icon-x"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path
+                  d="M18.901 1.153h3.68l-8.042 9.19L24 22.847h-7.406l-5.8-7.584-6.639 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932 6.064-6.932zM17.61 20.644h2.039L6.486 3.24H4.298z"
+                />
+              </svg>
+              Compartilhar no X</a
+            >
+            <a
+              class="btn-secondary share-btn share-btn--wa"
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://wa.me/?text={{ ('Olha esse design da comunidade MoleTom: ' ~ url_for('comunidade_design', community_design_id=community.id, _external=True)) | urlencode }}"
+              ><i class="fab fa-whatsapp"></i> Compartilhar no WhatsApp</a
             >
           </div>
         </div>

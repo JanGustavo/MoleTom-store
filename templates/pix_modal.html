@@ -1,0 +1,90 @@
+<!-- 
+  pix_modal.html — Bloco do modal de contribuição PIX.
+  Inclua dentro do <body> de checkout.html ou base.html.
+  Requer: pix_modal.css e pix_modal.js
+-->
+
+<!-- Botão de gatilho (coloque onde quiser na página) -->
+<button type="button" class="pix-trigger-btn" onclick="pixModal.open('1.00')">
+  <span class="pix-trigger-icon">💜</span>
+  Apoiar o Projeto
+</button>
+
+<!-- ===== MODAL ===== -->
+<div
+  id="pix-modal-overlay"
+  class="pix-overlay"
+  aria-modal="true"
+  role="dialog"
+  aria-label="Contribuir com PIX"
+>
+  <!-- Partículas de fundo -->
+  <div class="pix-particles" id="pix-particles"></div>
+
+  <div class="pix-modal">
+    <!-- Cabeçalho -->
+    <button class="pix-close" onclick="pixModal.close()" aria-label="Fechar">
+      ✕
+    </button>
+
+    <div class="pix-header">
+      <div class="pix-heart-anim">💜</div>
+      <h2 class="pix-title">Ajude o Projeto</h2>
+      <p class="pix-subtitle">
+        O MoleTom é feito com amor e código.<br />
+        Qualquer contribuição mantém a plataforma viva!
+      </p>
+    </div>
+
+    <!-- Valores sugeridos -->
+    <div class="pix-amounts" id="pix-amounts">
+      <div class="pix-amount-loading">Carregando valores...</div>
+    </div>
+
+    <!-- QR Code -->
+    <div class="pix-qr-wrap">
+      <div class="pix-qr-loader" id="pix-loader">
+        <div class="pix-spinner"></div>
+        <span>Gerando QR Code…</span>
+      </div>
+      <img
+        id="pix-qr-img"
+        class="pix-qr-img"
+        src=""
+        alt="QR Code PIX"
+        style="display: none"
+      />
+    </div>
+
+    <!-- Instrução -->
+    <p class="pix-instruction">
+      Abra o app do seu banco → <strong>PIX</strong> →
+      <strong>Ler QR Code</strong>
+    </p>
+
+    <!-- Botão "Já paguei" -->
+    <button
+      type="button"
+      class="pix-paid-btn"
+      onclick="pixModal.confirmPayment()"
+    >
+      ✅ Já contribuí!
+    </button>
+  </div>
+
+  <!-- ===== TELA DE AGRADECIMENTO ===== -->
+  <div class="pix-thanks" id="pix-thanks" style="display: none">
+    <div class="pix-confetti-wrap" id="pix-confetti"></div>
+    <div class="pix-thanks-card">
+      <div class="pix-thanks-emoji" id="pix-thanks-emoji">🎉</div>
+      <h2 class="pix-thanks-title">Muito obrigado!</h2>
+      <p class="pix-thanks-msg">
+        Sua contribuição é combustível para o MoleTom continuar crescendo.<br />
+        Você é incrível! 💜
+      </p>
+      <button type="button" class="pix-thanks-close" onclick="pixModal.close()">
+        Continuar explorando
+      </button>
+    </div>
+  </div>
+</div>
