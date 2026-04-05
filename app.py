@@ -27,13 +27,20 @@ from payment import gerar_qr_pix, get_valores_sugeridos
 
 load_dotenv()
 
+raw_database_url = os.environ.get("DATABASE_URL", "sqlite:///database.db")
+if raw_database_url.startswith("postgres://"):
+    raw_database_url = raw_database_url.replace("postgres://", "postgresql://", 1)
+
+is_sqlite_database = raw_database_url.startswith("sqlite")
+
 # Bootstrap principal da aplicacao.
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
 app.secret_key = app.config["SECRET_KEY"]
 
-app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL", "sqlite:///database.db")
+app.config["SQLALCHEMY_DATABASE_URI"] = raw_database_url
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {"pool_pre_ping": True}
 
 # Config de e-mail para recuperacao de conta (padrao Gmail, sobrescreva via env).
 app.config["MAIL_SERVER"] = os.environ.get("MAIL_SERVER", "smtp.gmail.com")
@@ -57,6 +64,9 @@ with app.app_context():
 
 # Compatibilidade de schema para bancos locais sem migracao formal.
 def _ensure_user_schema():
+    if not is_sqlite_database:
+        return
+
     # Compatibilidade para banco SQLite existente sem migracoes.
     existing_cols = {
         row[1] for row in db.session.execute(text("PRAGMA table_info(user)")).fetchall()
@@ -76,6 +86,9 @@ def _ensure_user_schema():
 
 
 def _ensure_design_schema():
+    if not is_sqlite_database:
+        return
+
     # Compatibilidade para banco SQLite existente sem migracoes.
     existing_cols = {
         row[1] for row in db.session.execute(text("PRAGMA table_info(design)")).fetchall()
