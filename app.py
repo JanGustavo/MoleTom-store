@@ -270,8 +270,12 @@ def cadastro():
             error_message = "Informe um numero valido com DDD."
         elif password != confirm_password:
             error_message = "Senha e confirmacao de senha nao conferem."
-        elif len(password) < 6:
-            error_message = "A senha deve ter pelo menos 6 caracteres."
+        elif len(password) < 8:
+            error_message = "A senha deve ter pelo menos 8 caracteres."
+        elif not re.search(r"[A-Z]", password):
+            error_message = "A senha deve conter pelo menos uma letra maiuscula."
+        elif username and username.lower() in password.lower():
+            error_message = "A senha nao pode conter seu nome de usuario."
         elif User.query.filter_by(email=email).first():
             error_message = "Este e-mail ja esta cadastrado."
         elif User.query.filter_by(username=username).first():
