@@ -17,9 +17,10 @@ from flask import (
     url_for,
 )
 from flask_mail import Mail, Message
+from sqlalchemy import inspect
 from itsdangerous import BadSignature, SignatureExpired, URLSafeTimedSerializer
 from sqlalchemy import text
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy.exc import IntegrityError, OperationalError
 
 from ai_generator import generate_design
 from models import CommunityDesign, CommunityVote, Design, Pedido, User, db
@@ -62,6 +63,16 @@ auto_create_schema = os.environ.get("AUTO_CREATE_SCHEMA", "false").lower() in {"
 if is_sqlite_database or auto_create_schema:
     with app.app_context():
         db.create_all()
+
+
+def _bootstrap_database_schema() -> None:
+    with app.app_context():
+        inspector = inspect(db.engine)
+        existing_tables = set(inspector.get_table_names())
+        expected_tables = {"user", "design", "community_design", "community_vote", "pedido"}
+
+        if not expected_tables.issubset(existing_tables):
+            db.create_all()
 
 
 # Compatibilidade de schema para bancos locais sem migracao formal.
@@ -442,6 +453,16 @@ def cadastro():
     }
 
     if request.method == "POST":
+        try:
+            _bootstrap_database_schema()
+        except OperationalError:
+            error_message = "Banco de dados indisponivel no momento. Tente novamente em instantes."
+            return render_template(
+                "cadastro.html",
+                error_message=error_message,
+                form_values=form_values,
+            )
+
         full_name = request.form.get("full_name", "").strip()
         username = request.form.get("username", "").strip().lower()
         phone = request.form.get("phone", "").strip()
