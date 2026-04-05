@@ -54,6 +54,15 @@ app.config["MAIL_PASSWORD"] = os.getenv("EMAIL_PASS")
 app.config["MAIL_DEFAULT_SENDER"] = os.environ.get(
     "MAIL_DEFAULT_SENDER", app.config["MAIL_USERNAME"] or "no-reply@moletom.store"
 )
+app.config["MAIL_TIMEOUT"] = 10  # Timeout de 10s para evitar congelamento
+
+# Log para diagnostico de credenciais
+email_user = app.config.get("MAIL_USERNAME")
+email_pass = app.config.get("MAIL_PASSWORD")
+if not email_user or not email_pass:
+    print(f"[WARNING] Email credentials missing: USER={bool(email_user)}, PASS={bool(email_pass)}", flush=True)
+else:
+    print(f"[INFO] Email configured: {email_user[:10]}...@***, server={app.config['MAIL_SERVER']}:{app.config['MAIL_PORT']}, tls={app.config['MAIL_USE_TLS']}", flush=True)
 
 db.init_app(app)
 mail = Mail(app)
@@ -216,10 +225,14 @@ def _send_password_reset_email(user: User) -> bool:
     message.html = html_body
 
     try:
+        print(f"[INFO] Attempting to send email to {user.email}...", flush=True)
         mail.send(message)
+        print(f"[INFO] Email sent successfully to {user.email}", flush=True)
         return True
     except Exception as e:
-        print(f"Erro ao enviar email: {e}", flush=True)
+        import traceback
+        print(f"[ERROR] Email send failed: {type(e).__name__}: {e}", flush=True)
+        print(f"[ERROR] Traceback:\n{traceback.format_exc()}", flush=True)
         return False
 
 
