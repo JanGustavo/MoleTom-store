@@ -1,11 +1,13 @@
 import io
 import os
+import base64
 import urllib.parse
 import urllib.request
 from pathlib import Path
 from uuid import uuid4
 from PIL import Image, ImageFilter, ImageEnhance, ImageChops
 
+import requests
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 STATIC_DIR = Path(BASE_DIR) / "static"
 GENERATED_DIR = STATIC_DIR / "generated"
@@ -112,9 +114,17 @@ def _composite(hoodie_path: str, stamp: Image.Image) -> str:
     GENERATED_DIR.mkdir(parents=True, exist_ok=True)
     filename = f"design-{uuid4().hex}.png"
     file_path = GENERATED_DIR / filename
-    file_path.write_bytes(buffer.getvalue())
+    with open(file_path, "wb") as output_file:
+        output_file.write(buffer.getvalue())
 
-    return f"/static/generated/{filename}"
+    url_da_nuvem = _upload_to_imgbb(file_path)
+
+    try:
+        file_path.unlink()
+    except OSError:
+        pass
+
+    return url_da_nuvem
 
 
 # -----------------------------
@@ -142,3 +152,25 @@ def generate_design(prompt: str, color: str = "preto") -> str:
 
 def generate_hoodie_image(prompt: str, color: str = "preto") -> str:
     return generate_design(prompt, color)
+
+
+def _upload_to_imgbb(image_path: Path) -> str:
+    api_key = os.environ.get("IMGBB_API_KEY")
+    if not api_key:
+        raise RuntimeError("IMGBB_API_KEY nao configurada.")
+
+    with open(image_path, "rb") as file:
+        payload = {
+            "key": api_key,
+            "image": base64.b64encode(file.read()).decode("utf-8"),
+        }
+
+    resposta = requests.post("https://api.imgbb.com/1/upload", data=payload, timeout=60)
+    if resposta.status_code != 200:
+        raise RuntimeError("Falha ao hospedar a imagem na nuvem.")
+
+    data = resposta.json()
+    if not data.get("success"):
+        raise RuntimeError("Falha ao hospedar a imagem na nuvem.")
+
+    return data["data"]["url"]

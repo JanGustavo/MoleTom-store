@@ -135,11 +135,32 @@
 }
 
 .action-buttons .btn-primary {
+    width: 100%;
     padding: 18px;
     text-align: center;
     font-size: 1.1rem;
-    border-radius: 12px;
-    font-weight: bold;
+    border-radius: 10px;
+    font-weight: 800;
+    letter-spacing: 0.4px;
+    border: 1px solid rgba(0, 188, 212, 0.34);
+    background: linear-gradient(90deg, #00bcd4 0%, #0ea5e9 55%, #2563eb 100%);
+    box-shadow: 0 12px 28px rgba(0, 188, 212, 0.2);
+    transition: transform 0.2s ease, box-shadow 0.25s ease, background 0.25s ease, border-color 0.25s ease;
+}
+
+.action-buttons .btn-primary:hover {
+    background: linear-gradient(90deg, rgba(0, 188, 212, 0.98), rgba(255, 0, 127, 0.88));
+    border-color: rgba(0, 188, 212, 0.62);
+    box-shadow: 0 16px 34px rgba(255, 0, 127, 0.22);
+    transform: translateY(-2px);
+}
+
+.action-buttons .btn-primary:focus-visible,
+.secondary-actions .btn-secondary:focus-visible,
+.share-actions .btn-secondary:focus-visible,
+.community-submit .btn-primary:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 188, 212, 0.18), 0 0 0 6px rgba(255, 0, 127, 0.15);
 }
 
 .secondary-actions {
@@ -149,21 +170,59 @@
 
 .secondary-actions .btn-secondary {
     flex: 1;
-    padding: 14px;
+    min-height: 58px;
+    padding: 14px 16px;
     text-align: center;
     border-radius: 10px;
     font-size: 0.95rem;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
-    border: 1px solid rgba(0, 188, 212, 0.18);
+    font-weight: 600;
+    background: linear-gradient(180deg, rgba(8, 34, 46, 0.95), rgba(9, 27, 38, 0.95));
+    border: 1px solid rgba(14, 165, 233, 0.35);
     color: #eafcff;
     text-decoration: none;
-    transition: 0.3s;
+    transition: transform 0.2s ease, background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 .secondary-actions .btn-secondary:hover {
-    background: linear-gradient(90deg, rgba(0, 188, 212, 0.15), rgba(255, 0, 127, 0.12));
+    transform: translateY(-2px);
+    background: linear-gradient(90deg, rgba(14, 165, 233, 0.28), rgba(37, 99, 235, 0.22));
     color: #fff;
-    border-color: rgba(0, 188, 212, 0.48);
+    border-color: rgba(14, 165, 233, 0.6);
+    box-shadow: 0 10px 22px rgba(0, 188, 212, 0.14);
+}
+
+.share-actions .btn-secondary {
+    min-height: 52px;
+    border-radius: 10px;
+    padding: 12px 20px;
+    font-weight: 600;
+    border-color: rgba(37, 99, 235, 0.35);
+    background: linear-gradient(180deg, rgba(11, 37, 56, 0.95), rgba(9, 30, 46, 0.95));
+}
+
+.share-actions .btn-secondary:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(90deg, rgba(14, 165, 233, 0.28), rgba(37, 99, 235, 0.22));
+    border-color: rgba(14, 165, 233, 0.6);
+    box-shadow: 0 10px 22px rgba(0, 188, 212, 0.14);
+}
+
+.community-submit .btn-primary {
+    width: 100%;
+    min-height: 54px;
+    border-radius: 10px;
+    border: 1px solid rgba(0, 188, 212, 0.34);
+    background: linear-gradient(90deg, #00bcd4 0%, #0ea5e9 55%, #2563eb 100%);
+    box-shadow: 0 10px 24px rgba(0, 188, 212, 0.16);
+    font-weight: 700;
+    letter-spacing: 0.3px;
+}
+
+.community-submit .btn-primary:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(90deg, rgba(0, 188, 212, 0.98), rgba(255, 0, 127, 0.88));
+    border-color: rgba(0, 188, 212, 0.62);
+    box-shadow: 0 14px 30px rgba(255, 0, 127, 0.2);
 }
 
 .share-card {
