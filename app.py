@@ -43,12 +43,12 @@ app.config["SQLALCHEMY_DATABASE_URI"] = raw_database_url
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {"pool_pre_ping": True}
 
-# Config de e-mail para recuperacao de conta (padrao Gmail, sobrescreva via env).
-# Nota: Render bloqueia porta 587, usar 465 com SSL em producao.
+# Config de e-mail para recuperacao de conta (Gmail padrao).
+# Configuracao comprovada: Port 587 (TLS) com TLS=True, SSL=False.
 app.config["MAIL_SERVER"] = os.environ.get("MAIL_SERVER", "smtp.gmail.com")
-app.config["MAIL_PORT"] = int(os.environ.get("MAIL_PORT", 465))
-app.config["MAIL_USE_TLS"] = os.environ.get("MAIL_USE_TLS", "false").lower() in {"1", "true", "yes"}
-app.config["MAIL_USE_SSL"] = os.environ.get("MAIL_USE_SSL", "true").lower() in {"1", "true", "yes"}
+app.config["MAIL_PORT"] = int(os.environ.get("MAIL_PORT", 587))
+app.config["MAIL_USE_TLS"] = os.environ.get("MAIL_USE_TLS", "true").lower() in {"1", "true", "yes"}
+app.config["MAIL_USE_SSL"] = os.environ.get("MAIL_USE_SSL", "false").lower() in {"1", "true", "yes"}
 app.config["MAIL_USERNAME"] = os.getenv("EMAIL_USER")
 app.config["MAIL_PASSWORD"] = os.getenv("EMAIL_PASS")
 app.config["MAIL_DEFAULT_SENDER"] = os.environ.get(
