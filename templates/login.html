@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>MOLE TOM | Login</title>
+    <title>MOLETOM | Login</title>
     <link rel="icon" href="{{ url_for('static', filename='img/logo2.png') }}" />
     <link
       rel="apple-touch-icon"
@@ -75,6 +75,10 @@
           <button class="btn btn-primary" type="submit">
             <i class="fas fa-right-to-bracket"></i> Entrar no Estúdio
           </button>
+
+          <a class="auth-forgot-link" href="{{ url_for('recuperar_conta') }}">
+            <i class="fas fa-key"></i> Esqueci minha senha
+          </a>
         </form>
 
         <div class="button-row">

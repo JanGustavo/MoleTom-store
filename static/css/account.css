@@ -204,6 +204,33 @@
     min-width: 200px;
 }
 
+.delete-account-form {
+    display: flex;
+    flex: 1;
+    min-width: 200px;
+}
+
+.delete-account-password {
+    width: 100%;
+    height: 44px;
+    border-radius: 10px;
+    border: 1px solid rgba(244, 63, 94, 0.32);
+    background: rgba(23, 12, 14, 0.9);
+    color: #ffeef3;
+    padding: 0 12px;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.delete-account-password:focus {
+    border-color: rgba(244, 63, 94, 0.65);
+    box-shadow: 0 0 0 3px rgba(244, 63, 94, 0.2);
+}
+
+.delete-account-error {
+    margin-bottom: 18px;
+}
+
 .button-row .btn-primary {
     background: var(--primary-color, #6200EE);
     color: #fff;
@@ -225,6 +252,114 @@
     background: linear-gradient(90deg, rgba(0, 188, 212, 0.15), rgba(255, 0, 127, 0.12));
     border-color: rgba(0, 188, 212, 0.48);
     color: #fff;
+}
+
+.button-row .btn-danger {
+    width: 100%;
+    border: 1px solid rgba(239, 68, 68, 0.62);
+    background:
+        radial-gradient(circle at 18% 24%, rgba(255, 255, 255, 0.14), transparent 28%),
+        linear-gradient(180deg, rgba(239, 68, 68, 0.42), rgba(127, 29, 29, 0.75));
+    color: #fff1f2;
+    cursor: pointer;
+    box-shadow: 0 12px 30px rgba(127, 29, 29, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    letter-spacing: 0.3px;
+}
+
+.button-row .btn-danger:hover {
+    background:
+        radial-gradient(circle at 22% 20%, rgba(255, 255, 255, 0.16), transparent 30%),
+        linear-gradient(180deg, rgba(248, 113, 113, 0.48), rgba(153, 27, 27, 0.86));
+    border-color: rgba(248, 113, 113, 0.92);
+    color: #fff;
+    transform: translateY(-2px) scale(1.01);
+}
+
+.danger-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1200;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+}
+
+.danger-modal[hidden] {
+    display: none;
+}
+
+.danger-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(2, 6, 23, 0.75);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+.danger-modal-panel {
+    position: relative;
+    width: min(520px, 94vw);
+    border-radius: 18px;
+    border: 1px solid rgba(239, 68, 68, 0.35);
+    background:
+        radial-gradient(circle at top right, rgba(239, 68, 68, 0.18), transparent 40%),
+        linear-gradient(160deg, rgba(17, 8, 11, 0.97), rgba(14, 6, 8, 0.96));
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(239, 68, 68, 0.18);
+    padding: 24px;
+}
+
+.danger-modal-badge {
+    display: inline-block;
+    margin: 0 0 10px;
+    padding: 5px 10px;
+    border-radius: 999px;
+    font-size: 0.74rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #fecdd3;
+    border: 1px solid rgba(251, 113, 133, 0.45);
+    background: rgba(190, 24, 93, 0.2);
+}
+
+.danger-modal-panel h3 {
+    margin: 0 0 10px;
+    font-size: 1.38rem;
+    color: #fff;
+}
+
+.danger-modal-copy {
+    margin: 0 0 16px;
+    color: rgba(255, 228, 230, 0.86);
+    line-height: 1.5;
+}
+
+.danger-modal-label {
+    display: block;
+    margin-bottom: 8px;
+    color: #fecdd3;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.danger-modal-error {
+    margin: 8px 0 0;
+    color: #fda4af;
+    font-size: 0.86rem;
+}
+
+.danger-modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.danger-modal-actions .btn {
+    min-width: 0;
+    flex: 1;
+}
+
+body.modal-open {
+    overflow: hidden;
 }
 
 @media (max-width: 768px) {
@@ -261,6 +396,18 @@
     }
 
     .button-row {
+        flex-direction: column;
+    }
+
+    .danger-modal {
+        padding: 14px;
+    }
+
+    .danger-modal-panel {
+        padding: 18px;
+    }
+
+    .danger-modal-actions {
         flex-direction: column;
     }
 }

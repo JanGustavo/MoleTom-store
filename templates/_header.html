@@ -78,7 +78,7 @@
     <div class="mobile-menu-footer">
       <a href="{{ url_for('minha_conta') }}" class="profile-pill">
         <div class="profile-avatar-small">
-          <span>{{ session.get('username', 'M')[:1] | upper }}</span>
+          <span>{{ (session.get('username') or 'M')[:1] | upper }}</span>
         </div>
         <span>Meu Perfil</span>
       </a>

@@ -1,0 +1,898 @@
+/* redefinir_senha.css - Tela melhorada de redefinição de senha */
+
+.reset-card {
+    position: relative;
+    overflow: hidden;
+    padding: 0 !important;
+}
+
+.reset-card::before {
+    content: none;
+}
+
+.reset-state {
+    display: none;
+    animation: fadeIn 0.4s ease-out forwards;
+    position: relative;
+    z-index: 1;
+}
+
+.reset-state[data-state]:not([hidden]) {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Header com Gradiente */
+.reset-header-gradient {
+    position: relative;
+    min-height: 280px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 40px;
+    text-align: center;
+    background: linear-gradient(135deg, #6200EE 0%, #2563eb 50%, #00bcd4 100%);
+}
+
+/* Logo - Centralizado no gradiente */
+.reset-header-gradient .logo-circle {
+    flex-shrink: 0;
+}
+
+.reset-header-gradient .auth-logo-circle {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 15px;
+    box-shadow: 0 8px 25px rgba(98, 0, 238, 0.35);
+    border: 3px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.reset-header-gradient .logo-circle-img {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+/* Header */
+.reset-header {
+    color: white;
+    text-align: center;
+}
+
+.reset-header h1 {
+    color: white;
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    margin-top: 0;
+}
+
+.reset-header .eyebrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+}
+
+.reset-header.text-center {
+    text-align: center;
+}
+
+#state-success .reset-header {
+    padding: 30px 30px 0;
+    color: #fff;
+}
+
+#state-success .reset-header .hero-copy {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.reset-header .hero-copy {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.95rem;
+    margin-bottom: 0;
+    margin-top: 5px;
+}
+
+/* Conteúdo do Formulário */
+.reset-content {
+    position: relative;
+    z-index: 1;
+    padding: 40px;
+    background: rgba(20, 22, 24, 0.6);
+    backdrop-filter: blur(16px);
+}
+
+/* Campos de Senha */
+.password-field {
+    margin-bottom: 25px;
+}
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-icon {
+    position: absolute;
+    left: 16px;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.95rem;
+    pointer-events: none;
+    transition: color 0.3s ease;
+    z-index: 2;
+}
+
+.auth-form label .input-wrapper .password-input {
+    padding-left: 44px;
+    padding-right: 44px;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 14px;
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    font-size: 0.9rem;
+    padding: 8px;
+    transition: color 0.3s ease;
+    z-index: 3;
+    width: auto;
+    height: auto;
+    margin: 0;
+}
+
+.password-toggle:hover {
+    color: var(--primary-color, #6200EE);
+}
+
+.auth-form input:focus ~ .input-icon {
+    color: var(--primary-color, #6200EE);
+}
+
+/* Indicador de Força */
+.strength-indicator {
+    margin-top: 12px;
+}
+
+.strength-bar {
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+.strength-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #ef4444, #f97316, #eab308, #22c55e);
+    transition: width 0.3s ease, background 0.3s ease;
+    border-radius: 3px;
+}
+
+.strength-text {
+    display: inline-block;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: 500;
+}
+
+.strength-text.weak {
+    color: #ef4444;
+}
+
+.strength-text.fair {
+    color: #f97316;
+}
+
+.strength-text.good {
+    color: #eab308;
+}
+
+.strength-text.strong {
+    color: #22c55e;
+}
+
+/* Requisitos */
+.requirements {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 15px;
+    padding: 15px;
+    background: rgba(0, 188, 212, 0.08);
+    border: 1px solid rgba(0, 188, 212, 0.2);
+    border-radius: 8px;
+}
+
+.requirement {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.6);
+    transition: all 0.3s ease;
+}
+
+.requirement i {
+    width: 18px;
+    height: 18px;
+    border: 1.5px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+}
+
+.requirement.met {
+    color: #22c55e;
+}
+
+.requirement.met i {
+    background: #22c55e;
+    border-color: #22c55e;
+    color: white;
+}
+
+.requirement.optional {
+    opacity: 0.6;
+}
+
+.requirement.optional.met {
+    opacity: 1;
+}
+
+/* Validação de Correspondência */
+.match-indicator,
+.match-error {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-top: 8px;
+}
+
+.match-indicator {
+    background: rgba(16, 185, 129, 0.15);
+    border: 1px solid rgba(16, 185, 129, 0.4);
+    color: #10b981;
+}
+
+.match-indicator i {
+    font-size: 1rem;
+}
+
+.match-error {
+    background: rgba(239, 68, 68, 0.15);
+    border: 1px solid rgba(239, 68, 68, 0.4);
+    color: #ef4444;
+}
+
+.match-error i {
+    font-size: 1rem;
+}
+
+/* Submit Button */
+.reset-submit {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 30px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #6200EE, #00bcd4) !important;
+    box-shadow: 0 8px 25px rgba(98, 0, 238, 0.3) !important;
+}
+
+.reset-submit:hover {
+    box-shadow: 0 12px 35px rgba(98, 0, 238, 0.4) !important;
+    transform: translateY(-2px);
+}
+
+.reset-submit:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.btn-spinner {
+    display: inline-flex;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Nota de Segurança */
+.security-note {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+    padding: 12px;
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    border-radius: 8px;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.security-note i {
+    color: #3b82f6;
+    flex-shrink: 0;
+}
+
+/* Estados de Sucesso */
+.reset-success-icon {
+    text-align: center;
+    margin-bottom: 25px;
+    position: relative;
+    z-index: 3;
+}
+
+.reset-success-icon i {
+    font-size: 4rem;
+    background: linear-gradient(135deg, #10b981, #00bcd4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.reset-success-steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin: 30px 0;
+    padding: 20px;
+    background: rgba(0, 188, 212, 0.08);
+    border: 1px solid rgba(0, 188, 212, 0.2);
+    border-radius: 12px;
+    position: relative;
+    z-index: 2;
+}
+
+.step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    text-align: center;
+}
+
+.step-number {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #10b981, #00bcd4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.3rem;
+    color: white;
+}
+
+.step-number i {
+    font-size: 1.2rem;
+}
+
+.step-text {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 500;
+}
+
+/* Footer */
+.reset-footer {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 30px;
+    position: relative;
+    z-index: 2;
+}
+
+.reset-back-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 16px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.reset-back-link:hover {
+    background: rgba(0, 188, 212, 0.12);
+    border-color: rgba(0, 188, 212, 0.3);
+    color: #fff;
+}
+
+/* Responsivo */
+@media (max-width: 480px) {
+    .reset-header-gradient {
+        min-height: 240px;
+        padding: 25px 30px;
+    }
+
+    .reset-header h1 {
+        font-size: 24px;
+    }
+
+    .reset-header .eyebrow {
+        font-size: 0.8rem;
+        letter-spacing: 0.5px;
+    }
+
+    .reset-header .hero-copy {
+        font-size: 0.9rem;
+    }
+
+    .reset-header-gradient .auth-logo-circle {
+        width: 70px;
+        height: 70px;
+        margin-bottom: 12px;
+    }
+
+    .reset-success-steps {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .reset-footer {
+        margin-top: 25px;
+    }
+
+    .auth-card {
+        padding: 30px 20px;
+    }
+
+    .requirements {
+        gap: 8px;
+        padding: 12px;
+    }
+
+    .requirement {
+        font-size: 0.85rem;
+    }
+}
+
+/* Validação de Email (Lado do Cliente) */
+.reset-form input:invalid:not(:placeholder-shown) {
+    border-color: rgba(239, 68, 68, 0.4) !important;
+}
+
+.reset-form input:valid:not(:placeholder-shown) {
+    border-color: rgba(16, 185, 129, 0.4) !important;
+}
+
+/* Overlay de Bloqueio */
+.reset-card {
+    position: relative;
+}
+
+.reset-submit-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 100;
+    border-radius: 24px;
+    cursor: not-allowed;
+    display: none;
+}
+
+.reset-submit-overlay.active {
+    display: block;
+}
+
+/* Campos de Senha */
+.password-field {
+    margin-bottom: 25px;
+}
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-icon {
+    position: absolute;
+    left: 16px;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.95rem;
+    pointer-events: none;
+    transition: color 0.3s ease;
+    z-index: 2;
+}
+
+.auth-form label .input-wrapper .password-input {
+    padding-left: 44px;
+    padding-right: 44px;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 14px;
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    font-size: 0.9rem;
+    padding: 8px;
+    transition: color 0.3s ease;
+    z-index: 3;
+    width: auto;
+    height: auto;
+    margin: 0;
+}
+
+.password-toggle:hover {
+    color: var(--primary-color, #6200EE);
+}
+
+.auth-form input:focus ~ .input-icon {
+    color: var(--primary-color, #6200EE);
+}
+
+/* Indicador de Força */
+.strength-indicator {
+    margin-top: 12px;
+}
+
+.strength-bar {
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+.strength-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #ef4444, #f97316, #eab308, #22c55e);
+    transition: width 0.3s ease, background 0.3s ease;
+    border-radius: 3px;
+}
+
+.strength-text {
+    display: inline-block;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: 500;
+}
+
+.strength-text.weak {
+    color: #ef4444;
+}
+
+.strength-text.fair {
+    color: #f97316;
+}
+
+.strength-text.good {
+    color: #eab308;
+}
+
+.strength-text.strong {
+    color: #22c55e;
+}
+
+/* Requisitos */
+.requirements {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 15px;
+    padding: 15px;
+    background: rgba(0, 188, 212, 0.08);
+    border: 1px solid rgba(0, 188, 212, 0.2);
+    border-radius: 8px;
+}
+
+.requirement {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.6);
+    transition: all 0.3s ease;
+}
+
+.requirement i {
+    width: 18px;
+    height: 18px;
+    border: 1.5px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+}
+
+.requirement.met {
+    color: #22c55e;
+}
+
+.requirement.met i {
+    background: #22c55e;
+    border-color: #22c55e;
+    color: white;
+}
+
+.requirement.optional {
+    opacity: 0.6;
+}
+
+.requirement.optional.met {
+    opacity: 1;
+}
+
+/* Validação de Correspondência */
+.match-indicator,
+.match-error {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-top: 8px;
+}
+
+.match-indicator {
+    background: rgba(16, 185, 129, 0.15);
+    border: 1px solid rgba(16, 185, 129, 0.4);
+    color: #10b981;
+}
+
+.match-indicator i {
+    font-size: 1rem;
+}
+
+.match-error {
+    background: rgba(239, 68, 68, 0.15);
+    border: 1px solid rgba(239, 68, 68, 0.4);
+    color: #ef4444;
+}
+
+.match-error i {
+    font-size: 1rem;
+}
+
+/* Submit Button */
+.reset-submit {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 30px;
+    overflow: hidden;
+}
+
+.reset-submit:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.btn-spinner {
+    display: inline-flex;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Nota de Segurança */
+.security-note {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+    padding: 12px;
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    border-radius: 8px;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.security-note i {
+    color: #3b82f6;
+    flex-shrink: 0;
+}
+
+/* Estados de Sucesso */
+.reset-success-icon {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.reset-success-icon i {
+    font-size: 4rem;
+    background: linear-gradient(135deg, #10b981, #00bcd4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.reset-success-steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin: 30px 0;
+    padding: 20px;
+    background: rgba(0, 188, 212, 0.08);
+    border: 1px solid rgba(0, 188, 212, 0.2);
+    border-radius: 12px;
+}
+
+.step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    text-align: center;
+}
+
+.step-number {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #10b981, #00bcd4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.3rem;
+    color: white;
+}
+
+.step-number i {
+    font-size: 1.2rem;
+}
+
+.step-text {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 500;
+}
+
+/* Footer */
+.reset-footer {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 30px;
+}
+
+.reset-back-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 16px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.reset-back-link:hover {
+    background: rgba(0, 188, 212, 0.12);
+    border-color: rgba(0, 188, 212, 0.3);
+    color: #fff;
+}
+
+/* Responsivo */
+@media (max-width: 480px) {
+    .reset-success-steps {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .reset-footer {
+        margin-top: 25px;
+    }
+
+    .auth-card {
+        padding: 30px 20px;
+    }
+
+    .requirements {
+        gap: 8px;
+        padding: 12px;
+    }
+
+    .requirement {
+        font-size: 0.85rem;
+    }
+}
+
+/* Validação de Email (Lado do Cliente) */
+.reset-form input:invalid:not(:placeholder-shown) {
+    border-color: rgba(239, 68, 68, 0.4) !important;
+}
+
+.reset-form input:valid:not(:placeholder-shown) {
+    border-color: rgba(16, 185, 129, 0.4) !important;
+}
+
+/* Overlay de Bloqueio */
+.reset-card {
+    position: relative;
+}
+
+.reset-submit-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 100;
+    border-radius: 24px;
+    cursor: not-allowed;
+    display: none;
+}
+
+.reset-submit-overlay.active {
+    display: block;
+}

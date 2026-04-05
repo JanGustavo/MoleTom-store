@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Redefinir Senha | MOLETOM</title>
+    <link rel="icon" href="{{ url_for('static', filename='img/logo2.png') }}" />
+    <link
+      rel="apple-touch-icon"
+      href="{{ url_for('static', filename='img/logo2.png') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/auth.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/redefinir_senha.css') }}"
+    />
+  </head>
+  <body>
+    <main class="page-shell login-shell">
+      <section class="auth-card reveal-init reset-card" id="reset-card">
+        <!-- Estado 1: Formulário de Reset -->
+        <div class="reset-state" id="state-form" data-state="form">
+          <!-- Header com Gradiente -->
+          <div class="reset-header-gradient">
+            <div class="logo-circle auth-logo-circle">
+              <img
+                class="logo-circle-img"
+                src="{{ url_for('static', filename='img/logo2.png') }}"
+                alt="MoleTom"
+              />
+            </div>
+
+            <div class="reset-header">
+              <p class="eyebrow">
+                <i class="fas fa-shield-alt"></i> Nova Senha
+              </p>
+              <h1>Redefinir sua senha</h1>
+              <p class="hero-copy">
+                Crie uma senha forte e segura para proteger sua conta.
+              </p>
+            </div>
+          </div>
+
+          <!-- Conteúdo do Formulário -->
+          <div class="reset-content">
+            {% if error_message %}
+            <p class="form-error" id="error-msg">
+              <i class="fas fa-exclamation-triangle"></i>
+              <span>{{ error_message }}</span>
+            </p>
+            {% endif %}
+
+            <form
+              method="POST"
+              class="generator-form auth-form reset-form"
+              id="reset-form"
+            >
+              <!-- Campo Senha -->
+              <div class="password-field">
+                <label for="password">
+                  Nova Senha
+                  <div class="input-wrapper">
+                    <i class="fas fa-lock input-icon"></i>
+                    <input
+                      type="password"
+                      id="password"
+                      name="password"
+                      class="password-input"
+                      placeholder="••••••••"
+                      required
+                    />
+                    <button
+                      type="button"
+                      class="password-toggle"
+                      id="toggle-password"
+                      tabindex="-1"
+                    >
+                      <i class="fas fa-eye"></i>
+                    </button>
+                  </div>
+                </label>
+
+                <!-- Indicador de Força -->
+                <div class="strength-indicator">
+                  <div class="strength-bar">
+                    <div class="strength-fill" id="strength-fill"></div>
+                  </div>
+                  <span class="strength-text" id="strength-text"
+                    >Força da senha</span
+                  >
+                </div>
+
+                <!-- Requisitos -->
+                <div class="requirements">
+                  <div class="requirement" data-req="length">
+                    <i class="fas fa-check"></i>
+                    <span>Mínimo 8 caracteres</span>
+                  </div>
+                  <div class="requirement" data-req="uppercase">
+                    <i class="fas fa-check"></i>
+                    <span>Pelo menos uma letra MAIÚSCULA</span>
+                  </div>
+                  <div class="requirement" data-req="number">
+                    <i class="fas fa-check"></i>
+                    <span>Idealmente, incluir número</span>
+                  </div>
+                  <div class="requirement" data-req="special">
+                    <i class="fas fa-check"></i>
+                    <span>Idealmente, incluir caractere especial (!@#$%)</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Campo Confirmação -->
+              <div class="password-field">
+                <label for="confirm_password">
+                  Confirmar Senha
+                  <div class="input-wrapper">
+                    <i class="fas fa-lock-open input-icon"></i>
+                    <input
+                      type="password"
+                      id="confirm_password"
+                      name="confirm_password"
+                      class="password-input"
+                      placeholder="••••••••"
+                      required
+                    />
+                    <button
+                      type="button"
+                      class="password-toggle"
+                      id="toggle-confirm"
+                      tabindex="-1"
+                    >
+                      <i class="fas fa-eye"></i>
+                    </button>
+                  </div>
+                </label>
+
+                <!-- Validação de Correspondência -->
+                <div class="match-indicator" id="match-indicator" hidden>
+                  <i class="fas fa-check"></i>
+                  <span>Senhas coincidem</span>
+                </div>
+                <div class="match-error" id="match-error" hidden>
+                  <i class="fas fa-times"></i>
+                  <span>Senhas não coincidem</span>
+                </div>
+              </div>
+
+              <!-- Botão Submit -->
+              <button
+                class="btn btn-primary reset-submit"
+                type="submit"
+                id="submit-btn"
+              >
+                <i class="fas fa-shield-alt"></i>
+                <span class="btn-text">Atualizar Senha</span>
+                <span class="btn-spinner" hidden>
+                  <i class="fas fa-spinner"></i>
+                </span>
+              </button>
+
+              <!-- Segurança -->
+              <div class="security-note">
+                <i class="fas fa-info-circle"></i>
+                <span>
+                  Sua senha é armazenada com segurança. Nunca compartilhe com
+                  ninguém.
+                </span>
+              </div>
+            </form>
+          </div>
+
+          <div class="reset-footer">
+            <a href="{{ url_for('login') }}" class="reset-back-link">
+              <i class="fas fa-arrow-left"></i> Voltar para login
+            </a>
+          </div>
+        </div>
+
+        <!-- Estado 2: Sucesso -->
+        <div class="reset-state" id="state-success" data-state="success" hidden>
+          <div class="reset-success-icon">
+            <i class="fas fa-check-circle"></i>
+          </div>
+
+          <div class="reset-header text-center">
+            <h1>Senha atualizada com sucesso! 🎉</h1>
+            <p class="hero-copy">
+              Sua nova senha foi salva. Você já pode entrar na sua conta com
+              ela.
+            </p>
+          </div>
+
+          <div class="reset-success-steps">
+            <div class="step">
+              <div class="step-number">
+                <i class="fas fa-check"></i>
+              </div>
+              <div class="step-text">Senha atualizada</div>
+            </div>
+            <div class="step">
+              <div class="step-number">
+                <i class="fas fa-right-to-bracket"></i>
+              </div>
+              <div class="step-text">Acesse sua conta</div>
+            </div>
+            <div class="step">
+              <div class="step-number">
+                <i class="fas fa-home"></i>
+              </div>
+              <div class="step-text">Comece a criar</div>
+            </div>
+          </div>
+
+          <div class="reset-footer">
+            <a
+              href="{{ url_for('login') }}"
+              class="btn btn-primary"
+              style="
+                display: inline-block;
+                text-decoration: none;
+                margin-bottom: 12px;
+              "
+            >
+              <i class="fas fa-sign-in-alt"></i> Entrar na minha conta
+            </a>
+            <a href="{{ url_for('home') }}" class="reset-back-link">
+              <i class="fas fa-home"></i> Ir para a loja
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/redefinir_senha.js') }}"></script>
+  </body>
+</html>

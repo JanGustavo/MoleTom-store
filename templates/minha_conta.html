@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>MOLE TOM | Minha Conta</title>
+    <title>MOLETOM | Minha Conta</title>
     <link rel="icon" href="{{ url_for('static', filename='img/logo2.png') }}" />
     <link
       rel="apple-touch-icon"
@@ -75,6 +75,11 @@
         </div>
 
         <div id="account-error" class="form-error" hidden></div>
+        {% if delete_error_message %}
+        <div class="form-error delete-account-error">
+          {{ delete_error_message }}
+        </div>
+        {% endif %}
 
         <section class="account-grid">
           <article class="account-card">
@@ -133,6 +138,69 @@
           <a class="btn btn-secondary" href="{{ url_for('logout') }}">
             <i class="fas fa-sign-out-alt"></i> Sair da Conta
           </a>
+          <form
+            method="post"
+            action="{{ url_for('excluir_conta') }}"
+            class="delete-account-form"
+            id="delete-account-form"
+          >
+            <input
+              type="hidden"
+              name="current_password"
+              id="delete-password-hidden"
+            />
+            <button type="button" class="btn btn-danger" id="open-delete-modal">
+              <i class="fas fa-trash-alt"></i> Excluir Conta
+            </button>
+          </form>
+        </div>
+
+        <div class="danger-modal" id="delete-account-modal" hidden>
+          <div class="danger-modal-backdrop" data-close-modal></div>
+          <div
+            class="danger-modal-panel"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="delete-modal-title"
+          >
+            <p class="danger-modal-badge">Ação irreversível</p>
+            <h3 id="delete-modal-title">Excluir conta permanentemente?</h3>
+            <p class="danger-modal-copy">
+              Todos os seus dados, criações e histórico serão removidos de forma
+              definitiva. Para continuar, confirme sua senha atual.
+            </p>
+
+            <label class="danger-modal-label" for="delete-password-input"
+              >Senha atual</label
+            >
+            <input
+              id="delete-password-input"
+              class="delete-account-password"
+              type="password"
+              placeholder="Digite sua senha"
+              autocomplete="current-password"
+            />
+            <p class="danger-modal-error" id="delete-modal-error" hidden>
+              Informe sua senha para confirmar a exclusão.
+            </p>
+
+            <div class="danger-modal-actions">
+              <button
+                type="button"
+                class="btn btn-secondary modal-cancel"
+                data-close-modal
+              >
+                Cancelar
+              </button>
+              <button
+                type="button"
+                class="btn btn-danger modal-confirm"
+                id="confirm-delete-account"
+              >
+                Excluir permanentemente
+              </button>
+            </div>
+          </div>
         </div>
       </section>
     </main>
@@ -205,5 +273,66 @@
         </p>
       </div>
     </footer>
+
+    <script>
+      (() => {
+        const openBtn = document.getElementById("open-delete-modal");
+        const modal = document.getElementById("delete-account-modal");
+        const closeTargets = document.querySelectorAll("[data-close-modal]");
+        const passwordInput = document.getElementById("delete-password-input");
+        const hiddenPasswordInput = document.getElementById(
+          "delete-password-hidden",
+        );
+        const form = document.getElementById("delete-account-form");
+        const confirmBtn = document.getElementById("confirm-delete-account");
+        const modalError = document.getElementById("delete-modal-error");
+
+        if (
+          !openBtn ||
+          !modal ||
+          !passwordInput ||
+          !hiddenPasswordInput ||
+          !form ||
+          !confirmBtn
+        ) {
+          return;
+        }
+
+        const openModal = () => {
+          modal.hidden = false;
+          document.body.classList.add("modal-open");
+          passwordInput.value = "";
+          hiddenPasswordInput.value = "";
+          modalError.hidden = true;
+          setTimeout(() => passwordInput.focus(), 20);
+        };
+
+        const closeModal = () => {
+          modal.hidden = true;
+          document.body.classList.remove("modal-open");
+          modalError.hidden = true;
+        };
+
+        openBtn.addEventListener("click", openModal);
+        closeTargets.forEach((el) => el.addEventListener("click", closeModal));
+
+        document.addEventListener("keydown", (event) => {
+          if (event.key === "Escape" && !modal.hidden) {
+            closeModal();
+          }
+        });
+
+        confirmBtn.addEventListener("click", () => {
+          const password = passwordInput.value.trim();
+          if (!password) {
+            modalError.hidden = false;
+            passwordInput.focus();
+            return;
+          }
+          hiddenPasswordInput.value = password;
+          form.submit();
+        });
+      })();
+    </script>
   </body>
 </html>

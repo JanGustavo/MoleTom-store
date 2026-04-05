@@ -156,6 +156,23 @@
     transform: translateY(-2px);
 }
 
+.auth-forgot-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 2px;
+    color: #9be8ff;
+    text-decoration: none;
+    font-size: 0.92rem;
+    font-weight: 600;
+}
+
+.auth-forgot-link:hover {
+    color: #d8f6ff;
+    text-decoration: underline;
+}
+
 .auth-card .button-row {
     margin-top: 25px;
     display: flex;

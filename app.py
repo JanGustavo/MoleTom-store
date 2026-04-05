@@ -1,27 +1,61 @@
-from functools import wraps
 import hashlib
+import mimetypes
 import os
 import re
+from functools import wraps
+from dotenv import load_dotenv
 
-from flask import Flask, Response, jsonify, render_template, request, redirect, url_for, session
+from flask import (
+    Flask,
+    Response,
+    jsonify,
+    redirect,
+    render_template,
+    render_template_string,
+    request,
+    session,
+    url_for,
+)
+from flask_mail import Mail, Message
+from itsdangerous import BadSignature, SignatureExpired, URLSafeTimedSerializer
 from sqlalchemy import text
 from sqlalchemy.exc import IntegrityError
-from models import db, Design, User, CommunityDesign, CommunityVote
+
 from ai_generator import generate_design
+from models import CommunityDesign, CommunityVote, Design, Pedido, User, db
 from payment import gerar_qr_pix, get_valores_sugeridos
 
-app = Flask(__name__)
-app.secret_key = "moletom-secret"
+load_dotenv()
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
+# Bootstrap principal da aplicacao.
+app = Flask(__name__)
+app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
+app.secret_key = app.config["SECRET_KEY"]
+
+app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL", "sqlite:///database.db")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
+# Config de e-mail para recuperacao de conta (padrao Gmail, sobrescreva via env).
+app.config["MAIL_SERVER"] = os.environ.get("MAIL_SERVER", "smtp.gmail.com")
+app.config["MAIL_PORT"] = int(os.environ.get("MAIL_PORT", 587))
+app.config["MAIL_USE_TLS"] = os.environ.get("MAIL_USE_TLS", "true").lower() in {"1", "true", "yes"}
+app.config["MAIL_USE_SSL"] = os.environ.get("MAIL_USE_SSL", "false").lower() in {"1", "true", "yes"}
+app.config["MAIL_USERNAME"] = os.getenv("EMAIL_USER")
+app.config["MAIL_PASSWORD"] = os.getenv("EMAIL_PASS")
+app.config["MAIL_DEFAULT_SENDER"] = os.environ.get(
+    "MAIL_DEFAULT_SENDER", app.config["MAIL_USERNAME"] or "no-reply@moletom.store"
+)
+
 db.init_app(app)
+mail = Mail(app)
+reset_serializer = URLSafeTimedSerializer(app.config["SECRET_KEY"])
+RESET_TOKEN_MAX_AGE_SECONDS = int(os.environ.get("RESET_TOKEN_MAX_AGE_SECONDS", 1800))
 
 with app.app_context():
     db.create_all()
 
 
+# Compatibilidade de schema para bancos locais sem migracao formal.
 def _ensure_user_schema():
     # Compatibilidade para banco SQLite existente sem migracoes.
     existing_cols = {
@@ -61,6 +95,7 @@ with app.app_context():
     _ensure_design_schema()
 
 
+# Helpers de permissao, sessao e identidade visual.
 def _is_curator(user: User | None) -> bool:
     if user is None:
         return False
@@ -96,6 +131,78 @@ def _avatar_initials(value: str) -> str:
     return "MT"
 
 
+def _build_password_reset_token(user: User) -> str:
+    return reset_serializer.dumps(user.email, salt="email-confirm")
+
+
+def _resolve_user_from_reset_token(token: str) -> User | None:
+    try:
+        email = reset_serializer.loads(
+            token,
+            salt="email-confirm",
+            max_age=RESET_TOKEN_MAX_AGE_SECONDS,
+        )
+    except (SignatureExpired, BadSignature):
+        return None
+
+    return User.query.filter_by(email=email).first()
+
+
+def _send_password_reset_email(user: User) -> bool:
+    reset_link = url_for("reset_password", token=_build_password_reset_token(user), _external=True)
+    message = Message(
+        subject="MOLETOM | Recuperacao de conta",
+        recipients=[user.email],
+    )
+
+    logo_cid = None
+    logo_path = os.path.join(app.root_path, "static", "img", "logo2.png")
+    if os.path.exists(logo_path):
+        with open(logo_path, "rb") as logo_file:
+            logo_bytes = logo_file.read()
+        logo_content_type = mimetypes.guess_type(logo_path)[0] or "image/png"
+        logo_cid = "moletom-logo"
+        message.attach(
+            filename="logo2.png",
+            content_type=logo_content_type,
+            data=logo_bytes,
+            disposition="inline",
+            headers={"Content-ID": f"<{logo_cid}>", "X-Attachment-Id": logo_cid},
+        )
+
+    # HTML do email com layout profissional e botão
+    html_body = render_template(
+        "email/reset_password.html",
+        reset_link=reset_link,
+        logo_cid=logo_cid,
+        logo_url=url_for("static", filename="img/logo2.png", _external=True),
+    )
+
+    # Fallback para plain text
+    message.body = (
+        "Recebemos um pedido para redefinir sua senha.\n\n"
+        f"Acesse este link para continuar: {reset_link}\n\n"
+        f"Esse link expira em {RESET_TOKEN_MAX_AGE_SECONDS // 60} minutos.\n"
+        "Se voce nao solicitou, ignore este e-mail."
+    )
+
+    message.html = html_body
+
+    try:
+        mail.send(message)
+        return True
+    except Exception:
+        return False
+
+
+def send_reset_email(user_email: str) -> bool:
+    user = User.query.filter_by(email=user_email).first()
+    if user is None:
+        return False
+    return _send_password_reset_email(user)
+
+
+# Rotas publicas de navegacao.
 @app.route("/api/avatar")
 def api_avatar():
     source = request.args.get("name", "").strip() or session.get("username") or "MoleTom"
@@ -191,6 +298,7 @@ def comunidade_design_checkout(community_design_id):
     return redirect(url_for("checkout", design_id=design.id))
 
 
+# Fluxos de autenticacao e ciclo de conta.
 @app.route("/login", methods=["GET", "POST"])
 def login():
     next_url = request.args.get("next") or request.form.get("next") or url_for("generator")
@@ -231,6 +339,77 @@ def login():
         next_url=next_url,
         error_message=error_message,
         email_value=email_value,
+    )
+
+
+@app.route("/recuperar-conta", methods=["GET", "POST"])
+def recuperar_conta():
+    notice = None
+    error_message = None
+    email_value = ""
+
+    if request.method == "POST":
+        email_value = request.form.get("email", "").strip().lower()
+        if not email_value:
+            error_message = "Informe seu e-mail para continuar."
+        else:
+            send_reset_email(email_value)
+            # Mensagem neutra evita enumeracao de contas.
+            notice = "Se o e-mail informado existir, enviamos um link para redefinir sua senha."
+
+    return render_template(
+        "recuperar_conta.html",
+        notice=notice,
+        error_message=error_message,
+        email_value=email_value,
+    )
+
+
+@app.route("/reset/<token>", methods=["GET", "POST"])
+@app.route("/redefinir-senha/<token>", methods=["GET", "POST"])
+def reset_password(token):
+    user = _resolve_user_from_reset_token(token)
+    if user is None:
+        return render_template_string(
+            """
+            <h1 style='text-align: center; margin-top: 50px; color: #fff;'>
+                O link expirou ou é inválido!
+            </h1>
+            <p style='text-align: center; color: #999;'>
+                <a href='{{ url_for("recuperar_conta") }}' style='color: #00bcd4;'>
+                    Solicitar novo link de recuperação
+                </a>
+            </p>
+            """,
+            recuperar_conta=recuperar_conta
+        )
+
+    error_message = None
+    success_message = None
+
+    if request.method == "POST":
+        password = request.form.get("password", "")
+        confirm_password = request.form.get("confirm_password", "")
+
+        if not password or not confirm_password:
+            error_message = "Preencha os dois campos de senha."
+        elif password != confirm_password:
+            error_message = "Senha e confirmacao de senha nao conferem."
+        elif len(password) < 8:
+            error_message = "A senha deve ter pelo menos 8 caracteres."
+        elif not re.search(r"[A-Z]", password):
+            error_message = "A senha deve conter pelo menos uma letra maiuscula."
+        elif user.username and user.username.lower() in password.lower():
+            error_message = "A senha nao pode conter seu nome de usuario."
+        else:
+            user.set_password(password)
+            db.session.commit()
+            success_message = "Senha atualizada com sucesso. Voce ja pode entrar na sua conta."
+
+    return render_template(
+        "redefinir_senha.html",
+        error_message=error_message,
+        success_message=success_message,
     )
 
 
@@ -316,7 +495,70 @@ def logout():
 @app.route("/minha-conta")
 @login_required
 def minha_conta():
-    return render_template("minha_conta.html")
+    delete_error = request.args.get("delete_error", "")
+    delete_error_message = None
+    if delete_error == "senha_invalida":
+        delete_error_message = "Senha atual incorreta. A conta nao foi excluida."
+    return render_template("minha_conta.html", delete_error_message=delete_error_message)
+
+
+@app.route("/minha-conta/excluir", methods=["POST"])
+@login_required
+def excluir_conta():
+    user = db.session.get(User, session.get("user_id"))
+    if user is None:
+        session.clear()
+        return redirect(url_for("home"))
+
+    current_password = request.form.get("current_password", "")
+    if not current_password or not user.check_password(current_password):
+        return redirect(url_for("minha_conta", delete_error="senha_invalida"))
+
+    try:
+        # Remove votos realizados por este usuario.
+        CommunityVote.query.filter_by(user_id=user.id).delete(synchronize_session=False)
+
+        # Coleta todos os ids de designs do usuario para limpar dependencias.
+        user_design_ids = [
+            design_id for (design_id,) in db.session.query(Design.id).filter_by(user_id=user.id).all()
+        ]
+
+        if user_design_ids:
+            community_design_ids = [
+                community_id
+                for (community_id,) in db.session.query(CommunityDesign.id)
+                .filter(CommunityDesign.design_id.in_(user_design_ids))
+                .all()
+            ]
+
+            if community_design_ids:
+                CommunityVote.query.filter(
+                    CommunityVote.community_design_id.in_(community_design_ids)
+                ).delete(synchronize_session=False)
+
+            CommunityDesign.query.filter(
+                CommunityDesign.design_id.in_(user_design_ids)
+            ).delete(synchronize_session=False)
+
+            Pedido.query.filter(Pedido.design_id.in_(user_design_ids)).delete(
+                synchronize_session=False
+            )
+
+            Design.query.filter(Design.id.in_(user_design_ids)).delete(
+                synchronize_session=False
+            )
+
+        # Garante limpeza extra de submissions associadas ao autor, caso existam.
+        CommunityDesign.query.filter_by(user_id=user.id).delete(synchronize_session=False)
+
+        db.session.delete(user)
+        db.session.commit()
+    except Exception:
+        db.session.rollback()
+        return redirect(url_for("minha_conta"))
+
+    session.clear()
+    return redirect(url_for("home"))
 
 
 @app.route("/api/minha-conta")

@@ -1,0 +1,263 @@
+/* recuperar_conta.css - Card melhorado para recuperação de conta */
+
+.recovery-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.recovery-submit-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 100;
+    border-radius: 24px;
+    cursor: not-allowed;
+}
+
+.recovery-state {
+    display: none;
+    animation: fadeIn 0.4s ease-out forwards;
+}
+
+.recovery-state[data-state]:not([hidden]) {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Header */
+.recovery-header {
+    margin-bottom: 30px;
+}
+
+.recovery-header.text-center {
+    text-align: center;
+}
+
+.recovery-header .eyebrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+/* Input com ícone */
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-icon {
+    position: absolute;
+    left: 16px;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.95rem;
+    pointer-events: none;
+    transition: color 0.3s ease;
+}
+
+.auth-form input:focus ~ .input-icon,
+.input-wrapper:has(input:focus) .input-icon {
+    color: var(--primary-color, #6200EE);
+}
+
+.auth-form label .input-wrapper input {
+    padding-left: 44px;
+}
+
+/* Submit Button com Estados */
+.recovery-submit {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    overflow: hidden;
+}
+
+.recovery-submit:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.btn-spinner {
+    display: inline-flex;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Estados de Sucesso */
+.recovery-success-icon {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.recovery-success-icon i {
+    font-size: 4rem;
+    background: linear-gradient(135deg, #00bcd4, #6200EE);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.recovery-subtitle {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-top: 15px;
+}
+
+/* Steps de Sucesso */
+.recovery-success-steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin: 30px 0;
+    padding: 20px;
+    background: rgba(0, 188, 212, 0.08);
+    border: 1px solid rgba(0, 188, 212, 0.2);
+    border-radius: 12px;
+}
+
+.step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    text-align: center;
+}
+
+.step-number {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #00bcd4, #00838f);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: white;
+}
+
+.step-text {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 500;
+}
+
+/* Estados de Erro */
+.recovery-error-icon {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.recovery-error-icon i {
+    font-size: 4rem;
+    color: #ff5252;
+    opacity: 0.9;
+}
+
+/* Footer */
+.recovery-footer {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 30px;
+}
+
+.recovery-back-link,
+.recovery-home-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 16px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.recovery-back-link:hover,
+.recovery-home-link:hover {
+    background: rgba(0, 188, 212, 0.12);
+    border-color: rgba(0, 188, 212, 0.3);
+    color: #fff;
+}
+
+/* Botão Secundário Customizado */
+.auth-card .btn-secondary[type="button"] {
+    cursor: pointer;
+}
+
+/* Responsivo */
+@media (max-width: 480px) {
+    .recovery-success-steps {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .recovery-footer {
+        margin-top: 25px;
+    }
+
+    .auth-card {
+        padding: 30px 20px;
+    }
+}
+
+/* Animações de Loading */
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.recovery-submit.loading {
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* Validação de Email (Lado do Cliente) */
+.recovery-form input:invalid:not(:placeholder-shown) {
+    border-color: rgba(255, 60, 60, 0.4);
+}
+
+.recovery-form input:valid:not(:placeholder-shown) {
+    border-color: rgba(16, 185, 129, 0.4);
+}
+
+/* Transições Suaves */
+.recovery-state {
+    transition: opacity 0.4s ease;
+}
+
+.recovery-state[hidden] {
+    display: none;
+    opacity: 0;
+}

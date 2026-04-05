@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Recuperar Conta | MOLETOM</title>
+    <link rel="icon" href="{{ url_for('static', filename='img/logo2.png') }}" />
+    <link
+      rel="apple-touch-icon"
+      href="{{ url_for('static', filename='img/logo2.png') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/auth.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/recuperar_conta.css') }}"
+    />
+  </head>
+  <body>
+    <main class="page-shell login-shell">
+      <section class="auth-card reveal-init recovery-card" id="recovery-card">
+        <!-- Bloqueio para evitar múltiplos submits -->
+        <div class="recovery-submit-overlay" id="submit-overlay" hidden></div>
+
+        <!-- Estado 1: Formulário Inicial -->
+        <div class="recovery-state" id="state-form" data-state="form">
+          <div class="logo-circle auth-logo-circle">
+            <img
+              class="logo-circle-img"
+              src="{{ url_for('static', filename='img/logo2.png') }}"
+              alt="MoleTom"
+            />
+          </div>
+
+          <div class="recovery-header">
+            <p class="eyebrow"><i class="fas fa-lock"></i> Segurança</p>
+            <h1>Recuperar sua conta</h1>
+            <p class="hero-copy">
+              Informe seu e-mail cadastrado e enviaremos um link para redefinir
+              sua senha. O link expira em 30 minutos.
+            </p>
+          </div>
+
+          {% if error_message %}
+          <p class="form-error" id="error-msg">
+            <i class="fas fa-exclamation-triangle"></i>
+            <span>{{ error_message }}</span>
+          </p>
+          {% endif %}
+
+          <form
+            method="POST"
+            class="generator-form auth-form recovery-form"
+            id="recovery-form"
+          >
+            <label>
+              E-mail cadastrado
+              <div class="input-wrapper">
+                <i class="fas fa-envelope input-icon"></i>
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="seu@email.com"
+                  value="{{ email_value or '' }}"
+                  required
+                  id="email-input"
+                  autocomplete="email"
+                />
+              </div>
+            </label>
+
+            <button
+              class="btn btn-primary recovery-submit"
+              type="submit"
+              id="submit-btn"
+            >
+              <i class="fas fa-arrow-right"></i>
+              <span class="btn-text">Enviar link de recuperação</span>
+              <span class="btn-spinner" hidden>
+                <i class="fas fa-spinner"></i>
+              </span>
+            </button>
+          </form>
+
+          <div class="recovery-footer">
+            <a href="{{ url_for('login') }}" class="recovery-back-link">
+              <i class="fas fa-arrow-left"></i> Voltar para login
+            </a>
+            <a href="{{ url_for('home') }}" class="recovery-home-link">
+              <i class="fas fa-home"></i> Ir para loja
+            </a>
+          </div>
+        </div>
+
+        <!-- Estado 2: Sucesso -->
+        <div
+          class="recovery-state"
+          id="state-success"
+          data-state="success"
+          hidden
+        >
+          <div class="recovery-success-icon">
+            <i class="fas fa-envelope"></i>
+          </div>
+
+          <div class="recovery-header text-center">
+            <h1>Verifique seu e-mail</h1>
+            <p class="hero-copy">
+              Enviamos um link de recuperação para
+              <strong id="success-email">{{ email_value }}</strong>.
+            </p>
+            <p class="recovery-subtitle">
+              O link é válido por <strong>30 minutos</strong>. Se não receber,
+              verifique a pasta de spam.
+            </p>
+          </div>
+
+          <div class="recovery-success-steps">
+            <div class="step">
+              <div class="step-number">1</div>
+              <div class="step-text">Abra seu e-mail</div>
+            </div>
+            <div class="step">
+              <div class="step-number">2</div>
+              <div class="step-text">Clique no link</div>
+            </div>
+            <div class="step">
+              <div class="step-number">3</div>
+              <div class="step-text">Defina uma nova senha</div>
+            </div>
+          </div>
+
+          <div class="recovery-footer">
+            <button class="btn btn-secondary" type="button" id="try-again-btn">
+              <i class="fas fa-redo"></i> Tentar outro e-mail
+            </button>
+            <a href="{{ url_for('login') }}" class="recovery-back-link">
+              <i class="fas fa-arrow-left"></i> Voltar para login
+            </a>
+          </div>
+        </div>
+
+        <!-- Estado 3: Erro -->
+        <div class="recovery-state" id="state-error" data-state="error" hidden>
+          <div class="recovery-error-icon">
+            <i class="fas fa-exclamation-circle"></i>
+          </div>
+
+          <div class="recovery-header text-center">
+            <h1>Algo deu errado</h1>
+            <p class="hero-copy" id="error-detail">
+              Não conseguimos processar sua solicitação. Tente novamente mais
+              tarde.
+            </p>
+          </div>
+
+          <div class="recovery-footer">
+            <button class="btn btn-primary" type="button" id="retry-btn">
+              <i class="fas fa-redo"></i> Tentar novamente
+            </button>
+            <a href="{{ url_for('login') }}" class="recovery-back-link">
+              <i class="fas fa-arrow-left"></i> Voltar para login
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/recuperar_conta.js') }}"></script>
+  </body>
+</html>
