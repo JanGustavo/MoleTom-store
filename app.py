@@ -905,6 +905,11 @@ def pix_valores():
     return jsonify({"valores": get_valores_sugeridos(), "default": "1.00"})
 
 
+@app.errorhandler(404)
+def handle_not_found(_error):
+    return redirect(url_for("home"))
+
+
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000)
     # app.run(debug=True)

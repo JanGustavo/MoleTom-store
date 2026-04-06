@@ -34,6 +34,11 @@ class AppRoutesTestCase(unittest.TestCase):
         response = self.client.get("/")
         self.assertEqual(response.status_code, 200)
 
+    def test_unknown_route_redirects_to_home(self):
+        response = self.client.get("/rota-inexistente", follow_redirects=False)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.headers.get("Location"), "/")
+
     def test_api_avatar_returns_svg(self):
         response = self.client.get("/api/avatar?name=moletom")
         self.assertEqual(response.status_code, 200)
