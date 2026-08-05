@@ -1,22 +1,11 @@
-<!doctype html>
-<html lang="pt-BR">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>MOLETOM | Checkout Seguro</title>
-    <link rel="icon" href="{{ url_for('static', filename='img/logo2.png') }}" />
-    <link
-      rel="apple-touch-icon"
-      href="{{ url_for('static', filename='img/logo2.png') }}"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/style.css') }}"
-    />
+{% extends 'base.html' %}
+
+{% set show_header = false %}
+{% set show_footer = false %}
+
+{% block title %}MOLETOM | Checkout Seguro{% endblock %}
+
+{% block extra_css %}
     <link
       rel="stylesheet"
       href="{{ url_for('static', filename='css/checkout.css') }}"
@@ -25,12 +14,20 @@
       rel="stylesheet"
       href="{{ url_for('static', filename='css/pix_modal.css') }}"
     />
+{% endblock %}
+
+{% block extra_js %}
     <script
       src="{{ url_for('static', filename='js/checkout.js') }}"
       defer
     ></script>
-  </head>
-  <body>
+    <script
+      src="{{ url_for('static', filename='js/pix_modal.js') }}"
+      defer
+    ></script>
+{% endblock %}
+
+{% block content %}
     <main class="page-shell checkout-shell">
       <div class="checkout-container reveal-init">
         <header class="checkout-header">
@@ -46,8 +43,7 @@
               <a
                 href="{{ url_for('home') }}"
                 class="brand-logo brand-title brand-mark"
-                ><span class="brand-mole">MOLE</span
-                ><span class="brand-tom">TOM</span></a
+                ><span class="brand-mole">MOLE</span><span class="brand-tom">TOM</span></a
               >
               <p class="brand-subtitle">Streetwear personalizado sob demanda</p>
             </div>
@@ -339,10 +335,4 @@
         </div>
       </div>
     </main>
-
-    <script
-      src="{{ url_for('static', filename='js/pix_modal.js') }}"
-      defer
-    ></script>
-  </body>
-</html>
+{% endblock %}

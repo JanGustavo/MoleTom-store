@@ -1,32 +1,25 @@
-<!doctype html>
-<html lang="pt-BR">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>MOLETOM | Preview do Moletom</title>
-    <link rel="icon" href="{{ url_for('static', filename='img/logo2.png') }}" />
-    <link
-      rel="apple-touch-icon"
-      href="{{ url_for('static', filename='img/logo2.png') }}"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/style.css') }}"
-    />
+{% extends 'base.html' %}
+
+{% set show_header = false %}
+{% set show_footer = false %}
+
+{% block title %}MOLETOM | Preview do Moletom{% endblock %}
+
+{% block extra_css %}
     <link
       rel="stylesheet"
       href="{{ url_for('static', filename='css/preview.css') }}"
     />
+{% endblock %}
+
+{% block extra_js %}
     <script
       src="{{ url_for('static', filename='js/preview_share.js') }}"
       defer
     ></script>
-  </head>
-  <body>
+{% endblock %}
+
+{% block content %}
     <main class="page-shell preview-shell">
       <div class="preview-container reveal-init">
         <header class="preview-header">
@@ -42,8 +35,7 @@
               <a
                 href="{{ url_for('home') }}"
                 class="brand-logo brand-title brand-mark"
-                ><span class="brand-mole">MOLE</span
-                ><span class="brand-tom">TOM</span></a
+                ><span class="brand-mole">MOLE</span><span class="brand-tom">TOM</span></a
               >
               <p class="brand-subtitle">Streetwear personalizado sob demanda</p>
             </div>
@@ -78,20 +70,7 @@
 
         <section class="preview-grid">
           <div class="hoodie-showcase">
-            {% if design.image_url.startswith('/static/generated/') or
-            design.image_url.startswith('data:image') %}
             <img src="{{ design.image_url }}" alt="Mockup final gerado" />
-            {% else %}
-            <img
-              src="{{ url_for('static', filename='img/moletom_' ~ design.color ~ '.webp') }}"
-              alt="Moletom {{ design.color }}"
-            />
-            <img
-              src="{{ design.image_url }}"
-              class="print"
-              alt="Estampa gerada"
-            />
-            {% endif %}
           </div>
 
           <div class="preview-info">
@@ -221,5 +200,4 @@
         </section>
       </div>
     </main>
-  </body>
-</html>
+{% endblock %}

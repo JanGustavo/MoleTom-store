@@ -1,22 +1,13 @@
-<!doctype html>
-<html lang="pt-BR">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>MOLETOM | Minha Conta</title>
-    <link rel="icon" href="{{ url_for('static', filename='img/logo2.png') }}" />
-    <link
-      rel="apple-touch-icon"
-      href="{{ url_for('static', filename='img/logo2.png') }}"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/style.css') }}"
-    />
+{% extends 'base.html' %}
+
+{% set nav_active = 'minha_conta' %}
+{% set announcement_text = '<strong>Seu painel pessoal:</strong> acompanhe suas criações, pedidos e dados da conta em um só lugar.' %}
+{% set show_cta_button = true %}
+{% set cta_text = 'Nova Arte' %}
+
+{% block title %}MOLETOM | Minha Conta{% endblock %}
+
+{% block extra_css %}
     <link
       rel="stylesheet"
       href="{{ url_for('static', filename='css/home.css') }}"
@@ -25,10 +16,9 @@
       rel="stylesheet"
       href="{{ url_for('static', filename='css/account.css') }}"
     />
-    <script
-      src="{{ url_for('static', filename='js/header.js') }}"
-      defer
-    ></script>
+{% endblock %}
+
+{% block extra_js %}
     <script
       src="{{ url_for('static', filename='js/index.js') }}"
       defer
@@ -37,19 +27,9 @@
       src="{{ url_for('static', filename='js/minha_conta.js') }}"
       defer
     ></script>
-    <script
-      src="{{ url_for('static', filename='js/header_scroll.js') }}"
-      defer
-    ></script>
-  </head>
-  <body class="page-shell">
-    {% set nav_active = 'minha_conta' %} {% set announcement_text = '<strong
-      >Seu painel pessoal:</strong
-    >
-    acompanhe suas criações, pedidos e dados da conta em um só lugar.' %} {% set
-    show_cta_button = true %} {% set cta_text = 'Nova Arte' %} {% include
-    '_header.html' %}
+{% endblock %}
 
+{% block content %}
     <main class="dashboard-shell">
       <section class="account-panel">
         <div class="account-hero">
@@ -204,135 +184,4 @@
         </div>
       </section>
     </main>
-
-    <footer class="real-footer">
-      <div class="container footer-grid">
-        <div class="footer-brand">
-          <img
-            id="imgFooter"
-            class="logo-circle-img footer-logo-img"
-            src="{{ url_for('static', filename='img/icone.png') }}"
-            alt="MoleTom"
-          />
-          <p>
-            A primeira marca de streetwear procedural do Brasil. Seu estilo,
-            gerado em segundos.
-          </p>
-          <div class="social-icons">
-            <a href="#"><i class="fab fa-instagram"></i></a>
-            <a href="#"><i class="fab fa-tiktok"></i></a>
-            <a href="#"><i class="fab fa-twitter"></i></a>
-          </div>
-        </div>
-
-        <div class="footer-links">
-          <h3>Loja</h3>
-          <ul>
-            <li><a href="#">Gerar Estampa IA</a></li>
-            <li>
-              <a href="{{ url_for('comunidade') }}">Galeria da Comunidade</a>
-            </li>
-            <li><a href="#">Guia de Tamanhos</a></li>
-            <li><a href="#">Rastrear Pedido</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-links">
-          <h3>Suporte</h3>
-          <ul>
-            <li><a href="#">FAQ & Dúvidas</a></li>
-            <li><a href="#">Trocas e Devoluções</a></li>
-            <li><a href="#">Política de Privacidade</a></li>
-            <li><a href="#">Fale Conosco</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-newsletter">
-          <h3>Receba Drops Exclusivos</h3>
-          <p>Assine para ganhar prompts secretos e descontos.</p>
-          <form class="newsletter-form">
-            <input type="email" placeholder="Seu melhor e-mail" required />
-            <button type="submit"><i class="fas fa-paper-plane"></i></button>
-          </form>
-          <div class="payment-methods">
-            <i class="fab fa-cc-visa"></i>
-            <i class="fab fa-cc-mastercard"></i>
-            <i class="fab fa-cc-amex"></i>
-            <i class="fas fa-qrcode"></i>
-          </div>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <p>
-          &copy; 2026
-          <span class="brand-mark">
-            <span class="brand-mole">MOLE</span
-            ><span class="brand-tom">TOM</span>
-          </span>
-          . CNPJ: 00.000.000/0001-00. Todos os direitos reservados.
-        </p>
-      </div>
-    </footer>
-
-    <script>
-      (() => {
-        const openBtn = document.getElementById("open-delete-modal");
-        const modal = document.getElementById("delete-account-modal");
-        const closeTargets = document.querySelectorAll("[data-close-modal]");
-        const passwordInput = document.getElementById("delete-password-input");
-        const hiddenPasswordInput = document.getElementById(
-          "delete-password-hidden",
-        );
-        const form = document.getElementById("delete-account-form");
-        const confirmBtn = document.getElementById("confirm-delete-account");
-        const modalError = document.getElementById("delete-modal-error");
-
-        if (
-          !openBtn ||
-          !modal ||
-          !passwordInput ||
-          !hiddenPasswordInput ||
-          !form ||
-          !confirmBtn
-        ) {
-          return;
-        }
-
-        const openModal = () => {
-          modal.hidden = false;
-          document.body.classList.add("modal-open");
-          passwordInput.value = "";
-          hiddenPasswordInput.value = "";
-          modalError.hidden = true;
-          setTimeout(() => passwordInput.focus(), 20);
-        };
-
-        const closeModal = () => {
-          modal.hidden = true;
-          document.body.classList.remove("modal-open");
-          modalError.hidden = true;
-        };
-
-        openBtn.addEventListener("click", openModal);
-        closeTargets.forEach((el) => el.addEventListener("click", closeModal));
-
-        document.addEventListener("keydown", (event) => {
-          if (event.key === "Escape" && !modal.hidden) {
-            closeModal();
-          }
-        });
-
-        confirmBtn.addEventListener("click", () => {
-          const password = passwordInput.value.trim();
-          if (!password) {
-            modalError.hidden = false;
-            passwordInput.focus();
-            return;
-          }
-          hiddenPasswordInput.value = password;
-          form.submit();
-        });
-      })();
-    </script>
-  </body>
-</html>
+{% endblock %}

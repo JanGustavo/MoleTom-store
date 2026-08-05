@@ -34,6 +34,26 @@ if raw_database_url.startswith("postgres://"):
 
 is_sqlite_database = raw_database_url.startswith("sqlite")
 
+if not is_sqlite_database:
+    try:
+        import psycopg2
+        from urllib.parse import urlparse
+        u = urlparse(raw_database_url)
+        conn = psycopg2.connect(
+            database=u.path[1:],
+            user=u.username,
+            password=u.password,
+            host=u.hostname,
+            port=u.port or 5432,
+            connect_timeout=3
+        )
+        conn.close()
+        print("[INFO] Conexão com PostgreSQL bem-sucedida.", flush=True)
+    except Exception as e:
+        print(f"[WARNING] Falha ao conectar ao PostgreSQL ({e}). Redirecionando para SQLite local.", flush=True)
+        raw_database_url = "sqlite:///database.db"
+        is_sqlite_database = True
+
 # Bootstrap principal da aplicacao.
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
@@ -165,6 +185,24 @@ def _avatar_initials(value: str) -> str:
     if len(parts) == 1:
         return parts[0][0].upper() + "T"
     return "MT"
+
+
+@app.context_processor
+def inject_user_context():
+    user_id = session.get("user_id")
+    user = None
+    if user_id:
+        try:
+            user = db.session.get(User, user_id)
+        except Exception:
+            pass
+    can_moderate = _is_curator(user)
+    is_logged_in = user_id is not None
+    return dict(
+        can_moderate=can_moderate,
+        is_logged_in=is_logged_in,
+        current_user=user
+    )
 
 
 def _build_password_reset_token(user: User) -> str:
@@ -431,21 +469,27 @@ def reset_password(token):
     if request.method == "POST":
         password = request.form.get("password", "")
         confirm_password = request.form.get("confirm_password", "")
+        is_ajax = request.headers.get("X-Requested-With") == "XMLHttpRequest"
 
         if not password or not confirm_password:
             error_message = "Preencha os dois campos de senha."
         elif password != confirm_password:
-            error_message = "Senha e confirmacao de senha nao conferem."
+            error_message = "Senha e confirmação de senha não conferem."
         elif len(password) < 8:
             error_message = "A senha deve ter pelo menos 8 caracteres."
         elif not re.search(r"[A-Z]", password):
-            error_message = "A senha deve conter pelo menos uma letra maiuscula."
+            error_message = "A senha deve conter pelo menos uma letra maiúscula."
         elif user.username and user.username.lower() in password.lower():
-            error_message = "A senha nao pode conter seu nome de usuario."
+            error_message = "A senha não pode conter seu nome de usuário."
         else:
             user.set_password(password)
             db.session.commit()
-            success_message = "Senha atualizada com sucesso. Voce ja pode entrar na sua conta."
+            success_message = "Senha atualizada com sucesso. Você já pode entrar na sua conta."
+            if is_ajax:
+                return jsonify({"success": True, "message": success_message})
+
+        if error_message and is_ajax:
+            return jsonify({"success": False, "error": error_message}), 400
 
     return render_template(
         "redefinir_senha.html",
@@ -784,12 +828,40 @@ def curadoria_comunidade():
 
 @app.route("/generator", methods=["GET", "POST"])
 def generator():
-    selected_color = request.args.get("color", "preto")
+    selected_color = "preto"
     prompt_value = ""
     error_message = None
 
+    # Se o usuário está logado e tem uma geração de imagem pendente, processa automaticamente
+    if session.get("user_id") and "pending_prompt" in session:
+        prompt = session.pop("pending_prompt")
+        color = session.pop("pending_color", "preto")
+        try:
+            image_url = generate_design(prompt, color)
+            design = Design(
+                user_id=session.get("user_id"),
+                prompt=prompt,
+                image_url=image_url,
+                color=color
+            )
+            db.session.add(design)
+            db.session.commit()
+            return redirect(url_for("preview", design_id=design.id))
+        except RuntimeError as exc:
+            error_message = str(exc)
+            prompt_value = prompt
+            selected_color = color
+            return render_template(
+                "generator.html",
+                selected_color=selected_color,
+                prompt_value=prompt_value,
+                error_message=error_message,
+            )
+
     if request.method == "POST":
         if not session.get("user_id"):
+            session["pending_prompt"] = request.form["prompt"]
+            session["pending_color"] = request.form.get("color", "preto")
             return redirect(url_for("login", next=request.path))
 
         prompt = request.form["prompt"]
@@ -819,6 +891,10 @@ def generator():
         db.session.commit()
 
         return redirect(url_for("preview", design_id=design.id))
+
+    # GET comum (recupera valores salvos se o usuário cancelou o login e voltou)
+    selected_color = request.args.get("color") or session.pop("pending_color", "preto")
+    prompt_value = session.pop("pending_prompt", "")
 
     return render_template(
         "generator.html",
@@ -903,6 +979,13 @@ def pix_qr():
 def pix_valores():
     """Retorna os valores sugeridos para o modal PIX."""
     return jsonify({"valores": get_valores_sugeridos(), "default": "1.00"})
+
+
+@app.route("/webhook/pix", methods=["POST"])
+def webhook_pix():
+    data = request.json
+    
+    
 
 
 @app.errorhandler(404)

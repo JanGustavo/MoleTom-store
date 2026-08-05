@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}MOLETOM | Sua Identidade, Seu Moletom{% endblock %}</title>
+
+    <link rel="icon" href="{{ url_for('static', filename='img/logo2.png') }}" />
+    <link
+      rel="apple-touch-icon"
+      href="{{ url_for('static', filename='img/logo2.png') }}"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+    {% block extra_css %}{% endblock %}
+
+    {% if show_header is not defined or show_header %}
+    <script
+      src="{{ url_for('static', filename='js/header.js') }}"
+      defer
+    ></script>
+    <script
+      src="{{ url_for('static', filename='js/header_scroll.js') }}"
+      defer
+    ></script>
+    {% endif %}
+    {% block extra_js %}{% endblock %}
+  </head>
+  <body class="{% block body_class %}page-shell{% endblock %}">
+    {% if show_header is not defined or show_header %}
+      {% include '_header.html' %}
+    {% endif %}
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-messages-container">
+          {% for category, message in messages %}
+            <div class="flash-message {{ category }}">
+              <i class="fas {% if category == 'success' %}fa-check-circle{% elif category == 'warning' %}fa-exclamation-triangle{% else %}fa-info-circle{% endif %}"></i>
+              <span>{{ message }}</span>
+              <button class="flash-close" onclick="this.parentElement.remove()">&times;</button>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+
+    {% if show_footer is not defined or show_footer %}
+      {% include '_footer.html' %}
+    {% endif %}
+  </body>
+</html>

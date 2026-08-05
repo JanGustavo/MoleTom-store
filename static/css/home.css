@@ -199,6 +199,8 @@ body {
 .hoodie-preview img {
     width: 100%;
     max-width: 450px;
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
     filter: drop-shadow(0 0 50px rgba(0, 188, 212, 0.3));
     animation: float 6s ease-in-out infinite;
 }
@@ -633,16 +635,47 @@ body.menu-open {
     line-height: 1.6;
 }
 
-/* ==========================================================================
-   CARDS DE MODELOS DE MOLETOM (Persona Cards)
-   ========================================================================== */
+/* Temas individuais para cada card de modelo */
+.card-casal {
+    --card-theme: #ff007f;
+    --card-theme-rgb: 255, 0, 127;
+}
+.card-turma {
+    --card-theme: #eab308;
+    --card-theme-rgb: 234, 179, 8;
+}
+.card-evento {
+    --card-theme: #2563eb;
+    --card-theme-rgb: 37, 99, 235;
+}
+.card-times {
+    --card-theme: #00bcd4;
+    --card-theme-rgb: 0, 188, 212;
+}
+.card-capsula {
+    --card-theme: #8b5cf6;
+    --card-theme-rgb: 139, 92, 246;
+}
+.card-comunidade {
+    --card-theme: #10b981;
+    --card-theme-rgb: 16, 185, 129;
+}
+
 .persona-card {
     padding: 0;
-    /* Removemos o padding interno para a imagem "colar" nas bordas do card */
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    /* Impede que a imagem fuja do border-radius do .glass-card */
+    border: 1px solid rgba(var(--card-theme-rgb), 0.15) !important;
+    background: linear-gradient(180deg, rgba(20, 22, 24, 0.4), rgba(var(--card-theme-rgb), 0.02)) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), inset 0 0 15px rgba(var(--card-theme-rgb), 0.03) !important;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+}
+
+.persona-card:hover {
+    border-color: var(--card-theme) !important;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 25px rgba(var(--card-theme-rgb), 0.25) !important;
+    transform: translateY(-8px) !important;
 }
 
 /* Área da imagem */
@@ -659,12 +692,14 @@ body.menu-open {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    filter: saturate(0.8) contrast(1.05) brightness(0.9);
+    transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 /* Efeito de zoom na foto ao focar no card */
 .persona-card:hover .persona-media img {
     transform: scale(1.08);
+    filter: saturate(1.1) contrast(1.1) brightness(1.0);
 }
 
 /* Etiqueta flutuante sobre a imagem (ex: "Exclusivo", "Conexão") */
@@ -675,14 +710,14 @@ body.menu-open {
     background: rgba(14, 16, 16, 0.85);
     backdrop-filter: blur(5px);
     color: #fff;
-    border: 1px solid var(--primary-color, #6200EE);
+    border: 1px solid var(--card-theme);
     padding: 6px 14px;
     border-radius: 30px;
     font-size: 0.75rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 1px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 10px rgba(var(--card-theme-rgb), 0.2);
 }
 
 /* Textos do card de moletom */
@@ -726,10 +761,10 @@ body.menu-open {
 }
 
 .buy-button:hover {
-    background: var(--primary-color, #6200EE);
-    border-color: var(--primary-color, #6200EE);
+    background: var(--card-theme, var(--primary-color, #6200EE));
+    border-color: var(--card-theme, var(--primary-color, #6200EE));
     transform: translateY(-2px);
-    box-shadow: 0 5px 20px rgba(98, 0, 238, 0.4);
+    box-shadow: 0 5px 20px rgba(var(--card-theme-rgb, 98, 0, 238), 0.4);
 }
 
 #imgFooter{

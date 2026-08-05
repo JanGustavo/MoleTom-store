@@ -1,32 +1,21 @@
-<!doctype html>
-<html lang="pt-BR">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Recuperar Conta | MOLETOM</title>
-    <link rel="icon" href="{{ url_for('static', filename='img/logo2.png') }}" />
-    <link
-      rel="apple-touch-icon"
-      href="{{ url_for('static', filename='img/logo2.png') }}"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/style.css') }}"
-    />
+{% extends 'base.html' %}
+{% set show_header = false %}
+{% set show_footer = false %}
+
+{% block title %}Recuperar Conta | MOLETOM{% endblock %}
+
+{% block extra_css %}
     <link
       rel="stylesheet"
       href="{{ url_for('static', filename='css/auth.css') }}"
     />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/recuperar_conta.css') }}"
-    />
-  </head>
-  <body>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{{ url_for('static', filename='js/recuperar_conta.js') }}" defer></script>
+{% endblock %}
+
+{% block content %}
     <main class="page-shell login-shell">
       <section class="auth-card reveal-init recovery-card" id="recovery-card">
         <!-- Bloqueio para evitar múltiplos submits -->
@@ -175,7 +164,4 @@
         </div>
       </section>
     </main>
-
-    <script src="{{ url_for('static', filename='js/recuperar_conta.js') }}"></script>
-  </body>
-</html>
+{% endblock %}

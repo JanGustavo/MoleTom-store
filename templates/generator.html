@@ -1,18 +1,13 @@
-<!doctype html>
-<html lang="pt-BR">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>MOLETOM | Gerador</title>
-    <link rel="icon" href="{{ url_for('static', filename='img/logo2.png') }}" />
-    <link
-      rel="apple-touch-icon"
-      href="{{ url_for('static', filename='img/logo2.png') }}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/style.css') }}"
-    />
+{% extends 'base.html' %}
+
+{% set nav_active = 'generator' %}
+{% set brand_subtitle = 'Streetwear personalizado sob demanda' %}
+{% set show_cta_button = false %}
+{% set show_footer = false %}
+
+{% block title %}MOLETOM | Gerador{% endblock %}
+
+{% block extra_css %}
     <link
       rel="stylesheet"
       href="{{ url_for('static', filename='css/generator.css') }}"
@@ -21,30 +16,16 @@
       rel="stylesheet"
       href="{{ url_for('static', filename='css/home.css') }}"
     />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
-    <script
-      src="{{ url_for('static', filename='js/header_scroll.js') }}"
-      defer
-    ></script>
-    <script
-      src="{{ url_for('static', filename='js/header.js') }}"
-      defer
-    ></script>
+{% endblock %}
+
+{% block extra_js %}
     <script
       src="{{ url_for('static', filename='js/generator_ui.js') }}"
       defer
     ></script>
-  </head>
-  <body>
-    <div class="page-shell">
-      {% set nav_active = 'generator' %}
-      {% set brand_subtitle = 'Streetwear personalizado sob demanda' %}
-      {% set show_cta_button = false %}
-      {% include '_header.html' %}
+{% endblock %}
 
+{% block content %}
       <main class="container">
         <section class="panel">
           <p class="eyebrow">Passo 2</p>
@@ -151,7 +132,29 @@
             <span class="reference-dot"></span>
             <span class="reference-text">Gerador de estampa - Passo 2</span>
           </div>
-        </section>
+      <!-- Overlay de Carregamento Premium -->
+      <div class="loading-overlay" id="loading-overlay" hidden>
+        <div class="loading-content">
+          <div class="loading-logo">
+            <span class="brand-mole">MOLE</span><span class="brand-tom">TOM</span>
+          </div>
+          <div class="loading-spinner-container">
+            <div class="glow-spinner"></div>
+            <div class="spinner-core"></div>
+          </div>
+          <h2 class="loading-title">Tecendo sua arte...</h2>
+          <p class="loading-subtitle">Nossa inteligência artificial está desenhando sua estampa exclusiva.</p>
+          
+          <div class="loading-bar">
+            <div class="loading-bar-fill"></div>
+          </div>
+          <div class="loading-status-steps">
+            <span class="status-step active" id="step-1">Conectando ao servidor...</span>
+            <span class="status-step" id="step-2">Processando estampa por IA...</span>
+            <span class="status-step" id="step-3">Aplicando estampa no moletom...</span>
+          </div>
+        </div>
+      </div>
       </main>
 
       <footer
@@ -168,6 +171,4 @@
           </p>
         </div>
       </footer>
-    </div>
-  </body>
-</html>
+{% endblock %}

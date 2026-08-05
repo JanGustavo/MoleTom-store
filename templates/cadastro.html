@@ -1,28 +1,17 @@
-<!doctype html>
-<html lang="pt-BR">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>MOLETOM | Cadastro</title>
-    <link rel="icon" href="{{ url_for('static', filename='img/logo2.png') }}" />
-    <link
-      rel="apple-touch-icon"
-      href="{{ url_for('static', filename='img/logo2.png') }}"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/style.css') }}"
-    />
+{% extends 'base.html' %}
+{% set show_header = false %}
+{% set show_footer = false %}
+
+{% block title %}MOLETOM | Cadastro{% endblock %}
+
+{% block extra_css %}
     <link
       rel="stylesheet"
       href="{{ url_for('static', filename='css/auth.css') }}"
     />
-  </head>
-  <body>
+{% endblock %}
+
+{% block content %}
     <main class="page-shell login-shell">
       <section class="auth-card reveal-init">
         <i class="fas fa-fingerprint auth-logo"></i>
@@ -125,5 +114,4 @@
         </div>
       </section>
     </main>
-  </body>
-</html>
+{% endblock %}

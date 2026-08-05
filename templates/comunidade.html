@@ -1,18 +1,14 @@
-<!doctype html>
-<html lang="pt-BR">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>MOLETOM | Galeria da Comunidade</title>
-    <link rel="icon" href="{{ url_for('static', filename='img/logo2.png') }}" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/style.css') }}"
-    />
+{% extends 'base.html' %}
+
+{% set nav_active = 'comunidade' %}
+{% set announcement_text = '<strong>Galeria ativa:</strong> vote, compartilhe e descubra os designs mais quentes da comunidade.' %}
+{% set brand_subtitle = 'Galeria da Comunidade' %}
+{% set show_cta_button = true %}
+{% set show_curator_button = true %}
+
+{% block title %}MOLETOM | Galeria da Comunidade{% endblock %}
+
+{% block extra_css %}
     <link
       rel="stylesheet"
       href="{{ url_for('static', filename='css/home.css') }}"
@@ -25,28 +21,19 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css"
     />
-    <script
-      src="{{ url_for('static', filename='js/header.js') }}"
-      defer
-    ></script>
+{% endblock %}
+
+{% block extra_js %}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
     <script
       src="{{ url_for('static', filename='js/community.js') }}"
       defer
     ></script>
-    <script
-      src="{{ url_for('static', filename='js/header_scroll.js') }}"
-      defer
-    ></script>
-  </head>
-  <body class="page-shell community-shell">
-    {% set nav_active = 'comunidade' %} {% set announcement_text = '<strong
-      >Galeria ativa:</strong
-    >
-    vote, compartilhe e descubra os designs mais quentes da comunidade.' %} {%
-    set brand_subtitle = 'Galeria da Comunidade' %} {% set show_cta_button =
-    true %} {% set show_curator_button = true %} {% include '_header.html' %}
+{% endblock %}
 
+{% block body_class %}page-shell community-shell{% endblock %}
+
+{% block content %}
     <main class="container">
       <section class="community-hero">
         <h1>Designs da Comunidade MoleTom</h1>
@@ -117,7 +104,6 @@
                       d="M18.901 1.153h3.68l-8.042 9.19L24 22.847h-7.406l-5.8-7.584-6.639 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932 6.064-6.932zM17.61 20.644h2.039L6.486 3.24H4.298z"
                     />
                   </svg>
-                  
                 </a>
               </div>
 
@@ -142,5 +128,4 @@
         {% endif %}
       </section>
     </main>
-  </body>
-</html>
+{% endblock %}

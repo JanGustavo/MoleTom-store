@@ -1,46 +1,24 @@
-<!doctype html>
-<html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MOLETOM | Sua Identidade, Seu Moletom</title>
+{% extends 'base.html' %}
 
-    <link rel="icon" href="{{ url_for('static', filename='img/logo2.png') }}" />
-    <link
-      rel="apple-touch-icon"
-      href="{{ url_for('static', filename='img/logo2.png') }}"
-    />
+{% block title %}MOLETOM | Sua Identidade, Seu Moletom{% endblock %}
 
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/style.css') }}"
-    />
+{% block extra_css %}
     <link
       rel="stylesheet"
       href="{{ url_for('static', filename='css/home.css') }}"
     />
+{% endblock %}
 
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
-
-    <script
-      src="{{ url_for('static', filename='js/header.js') }}"
-      defer
-    ></script>
+{% block extra_js %}
     <script
       src="{{ url_for('static', filename='js/index.js') }}"
       defer
     ></script>
-    <script
-      src="{{ url_for('static', filename='js/header_scroll.js') }}"
-      defer
-    ></script>
-  </head>
-  <body class="page-shell">
-    {% set nav_active = 'home' %} {% set show_cta_button = true %} {% include
-    '_header.html' %}
+{% endblock %}
+
+{% block content %}
+    {% set nav_active = 'home' %}
+    {% set show_cta_button = true %}
 
     <main class="container">
       <section class="hero">
@@ -72,7 +50,7 @@
               <img src="https://i.pravatar.cc/100?img=3" alt="User" />
               <img src="https://i.pravatar.cc/100?img=4" alt="User" />
             </div>
-            <p>Mais de <strong>5.000+</strong> estilos gerados essa semana.</p>
+            <p>Mais de <strong>1.000+</strong> estilos gerados essa semana.</p>
           </div>
         </div>
         <div class="hero-mockup reveal-init">
@@ -161,7 +139,7 @@
       </section>
 
       <div class="personalization-grid">
-        <article class="persona-card glass-card reveal-init">
+        <article class="persona-card glass-card reveal-init card-casal">
           <div class="persona-media">
             <img
               src="{{ url_for('static', filename='img/moletom_casal.png') }}"
@@ -179,7 +157,7 @@
           </a>
         </article>
 
-        <article class="persona-card glass-card reveal-init">
+        <article class="persona-card glass-card reveal-init card-turma">
           <div class="persona-media">
             <img
               src="{{ url_for('static', filename='img/moletomCodar.png') }}"
@@ -197,7 +175,7 @@
           </a>
         </article>
 
-        <article class="persona-card glass-card reveal-init">
+        <article class="persona-card glass-card reveal-init card-evento">
           <div class="persona-media">
             <img
               src="{{ url_for('static', filename='img/MoletomEvento.jpg') }}"
@@ -215,7 +193,7 @@
           </a>
         </article>
 
-        <article class="persona-card glass-card reveal-init">
+        <article class="persona-card glass-card reveal-init card-times">
           <div class="persona-media">
             <img
               src="{{ url_for('static', filename='img/tecTudo.png') }}"
@@ -233,7 +211,7 @@
           </a>
         </article>
 
-        <article class="persona-card glass-card reveal-init">
+        <article class="persona-card glass-card reveal-init card-capsula">
           <div class="persona-media">
             <img
               src="{{ url_for('static', filename='img/tematico.jpg') }}"
@@ -251,7 +229,7 @@
           </a>
         </article>
 
-        <article class="persona-card glass-card reveal-init">
+        <article class="persona-card glass-card reveal-init card-comunidade">
           <div class="persona-media">
             <img
               src="{{ url_for('static', filename='img/simp.jpeg') }}"
@@ -328,74 +306,4 @@
         </div>
       </section>
     </main>
-
-    <footer class="real-footer">
-      <div class="container footer-grid">
-        <div class="footer-brand">
-          <img
-            id="imgFooter"
-            class="logo-circle-img footer-logo-img"
-            src="{{ url_for('static', filename='img/icone.png') }}"
-            alt="MoleTom"
-          />
-          <p>
-            A primeira marca de streetwear procedural do Brasil. Seu estilo,
-            gerado em segundos.
-          </p>
-          <div class="social-icons">
-            <a href="#"><i class="fab fa-instagram"></i></a>
-            <a href="#"><i class="fab fa-tiktok"></i></a>
-            <a href="#"><i class="fab fa-twitter"></i></a>
-          </div>
-        </div>
-
-        <div class="footer-links">
-          <h3>Loja</h3>
-          <ul>
-            <li><a href="#">Gerar Estampa IA</a></li>
-            <li>
-              <a href="{{ url_for('comunidade') }}">Galeria da Comunidade</a>
-            </li>
-            <li><a href="#">Guia de Tamanhos</a></li>
-            <li><a href="#">Rastrear Pedido</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-links">
-          <h3>Suporte</h3>
-          <ul>
-            <li><a href="#">FAQ & Dúvidas</a></li>
-            <li><a href="#">Trocas e Devoluções</a></li>
-            <li><a href="#">Política de Privacidade</a></li>
-            <li><a href="#">Fale Conosco</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-newsletter">
-          <h3>Receba Drops Exclusivos</h3>
-          <p>Assine para ganhar prompts secretos e descontos.</p>
-          <form class="newsletter-form">
-            <input type="email" placeholder="Seu melhor e-mail" required />
-            <button type="submit"><i class="fas fa-paper-plane"></i></button>
-          </form>
-          <div class="payment-methods">
-            <i class="fab fa-cc-visa"></i>
-            <i class="fab fa-cc-mastercard"></i>
-            <i class="fab fa-cc-amex"></i>
-            <i class="fas fa-qrcode"></i>
-          </div>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <p>
-          &copy; 2026
-          <span class="brand-mark">
-            <span class="brand-mole">MOLE</span
-            ><span class="brand-tom">TOM</span>
-          </span>
-          . CNPJ: 00.000.000/0001-00. Todos os direitos reservados.
-        </p>
-      </div>
-    </footer>
-  </body>
-</html>
+{% endblock %}

@@ -123,6 +123,21 @@ a:hover {
     flex-shrink: 0;
 }
 
+.logo-link-anim {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+}
+
+.logo-link-anim:hover {
+    transform: scale(1.08) rotate(3deg);
+    border-color: var(--primary-color, #6200EE);
+    box-shadow: 0 0 15px rgba(98, 0, 238, 0.4);
+}
+
+.logo-link-anim:active {
+    transform: scale(0.95);
+}
+
 .logo-circle-img {
     width: 100%;
     height: 100%;
@@ -621,5 +636,90 @@ a:hover {
 @media (max-width: 480px) {
     .header-dashboard h2 {
         font-size: 24px;
+    }
+}
+
+/* Mensagens Flashed (Notificações) */
+.flash-messages-container {
+    position: fixed;
+    top: 90px;
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 450px;
+    pointer-events: none;
+}
+
+.flash-message {
+    pointer-events: auto;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    border-radius: 12px;
+    background: rgba(20, 22, 24, 0.95);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    animation: slideIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.flash-message.success {
+    border-color: #10b981;
+}
+
+.flash-message.success i {
+    color: #10b981;
+}
+
+.flash-message.warning {
+    border-color: #f97316;
+}
+
+.flash-message.warning i {
+    color: #f97316;
+}
+
+.flash-message.error {
+    border-color: #ef4444;
+}
+
+.flash-message.error i {
+    color: #ef4444;
+}
+
+.flash-message span {
+    font-size: 0.95rem;
+    font-weight: 500;
+    line-height: 1.4;
+    color: #fff;
+}
+
+.flash-close {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    font-size: 1.3rem;
+    margin-left: auto;
+    padding: 0 0 0 10px;
+    transition: color 0.2s;
+}
+
+.flash-close:hover {
+    color: #fff;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
     }
 }

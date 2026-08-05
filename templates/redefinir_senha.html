@@ -1,32 +1,21 @@
-<!doctype html>
-<html lang="pt-BR">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Redefinir Senha | MOLETOM</title>
-    <link rel="icon" href="{{ url_for('static', filename='img/logo2.png') }}" />
-    <link
-      rel="apple-touch-icon"
-      href="{{ url_for('static', filename='img/logo2.png') }}"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/style.css') }}"
-    />
+{% extends 'base.html' %}
+{% set show_header = false %}
+{% set show_footer = false %}
+
+{% block title %}Redefinir Senha | MOLETOM{% endblock %}
+
+{% block extra_css %}
     <link
       rel="stylesheet"
       href="{{ url_for('static', filename='css/auth.css') }}"
     />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/redefinir_senha.css') }}"
-    />
-  </head>
-  <body>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{{ url_for('static', filename='js/redefinir_senha.js') }}" defer></script>
+{% endblock %}
+
+{% block content %}
     <main class="page-shell login-shell">
       <section class="auth-card reveal-init reset-card" id="reset-card">
         <!-- Estado 1: Formulário de Reset -->
@@ -243,7 +232,4 @@
         </div>
       </section>
     </main>
-
-    <script src="{{ url_for('static', filename='js/redefinir_senha.js') }}"></script>
-  </body>
-</html>
+{% endblock %}

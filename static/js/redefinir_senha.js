@@ -244,19 +244,20 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch(resetForm.action || window.location.pathname, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-Requested-With': 'XMLHttpRequest'
                 },
                 body: new URLSearchParams(new FormData(resetForm))
             });
 
-            const text = await response.text();
+            const data = await response.json();
 
-            if (response.ok) {
+            if (response.ok && data.success) {
                 // Sucesso - mostra estado de sucesso
                 changeState('success');
             } else {
                 // Erro
-                showError('Erro ao atualizar senha. Tente novamente.');
+                showError(data.error || 'Erro ao atualizar senha. Tente novamente.');
                 showSpinner(false);
             }
         } catch (error) {

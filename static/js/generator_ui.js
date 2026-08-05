@@ -44,4 +44,38 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     renderColorPreview();
+
+    // Gerenciamento do Overlay de Carregamento Premium
+    const generatorForm = document.querySelector(".generator-form");
+    const loadingOverlay = document.getElementById("loading-overlay");
+
+    if (generatorForm && loadingOverlay) {
+        generatorForm.addEventListener("submit", () => {
+            if (promptInput && promptInput.value.trim() !== "") {
+                loadingOverlay.removeAttribute("hidden");
+
+                const step1 = document.getElementById("step-1");
+                const step2 = document.getElementById("step-2");
+                const step3 = document.getElementById("step-3");
+
+                // Transição Passo 1 -> Passo 2 (2.5s)
+                setTimeout(() => {
+                    if (step1 && step2) {
+                        step1.classList.remove("active");
+                        step1.classList.add("done");
+                        step2.classList.add("active");
+                    }
+                }, 2500);
+
+                // Transição Passo 2 -> Passo 3 (5.5s)
+                setTimeout(() => {
+                    if (step2 && step3) {
+                        step2.classList.remove("active");
+                        step2.classList.add("done");
+                        step3.classList.add("active");
+                    }
+                }, 5500);
+            }
+        });
+    }
 });

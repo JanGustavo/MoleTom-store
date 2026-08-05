@@ -31,8 +31,10 @@ POLLINATIONS_URL = "https://image.pollinations.ai/prompt/{prompt}?width=768&heig
 def _generate_stamp(prompt: str) -> Image.Image:
     """
     Chama Pollinations.ai (FLUX, gratuito, sem auth) para gerar a arte da estampa.
-    Prompt otimizado para retornar só a arte, sem moletom no resultado.
+    Tenta até 3 vezes com fallback de modelos e backoff em caso de falha ou erro 500.
     """
+    import time
+    import random
     stamp_prompt = (
         f"2D sticker art, isolated on white background: {prompt}. "
         f"Bold outline, vibrant colors, flat vector illustration. "
@@ -40,15 +42,30 @@ def _generate_stamp(prompt: str) -> Image.Image:
     )
 
     encoded = urllib.parse.quote(stamp_prompt)
-    url = POLLINATIONS_URL.format(prompt=encoded)
+    seed = random.randint(1, 999999)
+    
+    # Lista de URLs com semente aleatória para evitar cache e bypassar rate limits simples
+    urls = [
+        POLLINATIONS_URL.format(prompt=encoded) + f"&seed={seed}",
+        f"https://image.pollinations.ai/prompt/{encoded}?width=768&height=768&nologo=true&enhance=true&seed={seed}",
+        f"https://image.pollinations.ai/prompt/{encoded}?width=512&height=512&model=turbo&nologo=true&seed={seed}"
+    ]
 
-    req = urllib.request.Request(url, headers={"User-Agent": "MoleTom-Store/1.0"})
-    with urllib.request.urlopen(req, timeout=60) as resp:
-        if resp.status != 200:
-            raise RuntimeError(f"Pollinations retornou status {resp.status}")
-        data = resp.read()
+    last_error = None
+    for attempt in range(3):
+        url = urls[attempt] if attempt < len(urls) else urls[0]
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": "MoleTom-Store/1.0"})
+            with urllib.request.urlopen(req, timeout=30) as resp:
+                if resp.status == 200:
+                    data = resp.read()
+                    return Image.open(io.BytesIO(data)).convert("RGBA")
+        except Exception as exc:
+            last_error = exc
+            print(f"[WARNING] Tentativa {attempt + 1} falhou ao gerar imagem ({exc}). Retentando...", flush=True)
+            time.sleep(2 * (attempt + 1))
 
-    return Image.open(io.BytesIO(data)).convert("RGBA")
+    raise RuntimeError(f"Pollinations indisponível após 3 tentativas: {last_error}")
 
 
 # -----------------------------
@@ -143,10 +160,26 @@ def generate_design(prompt: str, color: str = "preto") -> str:
 
     try:
         stamp = _generate_stamp(normalized_prompt)
+        need_bg_removal = True
     except Exception as exc:
-        raise RuntimeError(f"Falha ao gerar estampa: {exc}") from exc
+        print(f"[WARNING] Erro de API externa ({exc}). Usando estampa de fallback local.", flush=True)
+        fallback_path = os.path.join(BASE_DIR, "static", "img", "icone.png")
+        if os.path.exists(fallback_path):
+            stamp = Image.open(fallback_path).convert("RGBA")
+            need_bg_removal = False  # O ícone local já tem fundo transparente adequado
+        else:
+            stamp = Image.new("RGBA", (512, 512), (98, 0, 238, 255))
+            need_bg_removal = False
+        
+        try:
+            from flask import flash, has_request_context
+            if has_request_context():
+                flash("A API de IA atingiu o limite de requisições temporariamente (429/500). Aplicamos a logo da MoleTom como estampa para você continuar testando!", "warning")
+        except Exception:
+            pass
 
-    stamp = _remove_white_background(stamp)
+    if need_bg_removal:
+        stamp = _remove_white_background(stamp)
     return _composite(hoodie_path, stamp)
 
 
